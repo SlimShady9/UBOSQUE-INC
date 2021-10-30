@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  body {
+    @apply overflow-x-hidden antialiased bg-white dark:bg-gray-900;
+  }
+}
+
+.animate-slebew{
+animation: slebew 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite   ;
+}
+
+@keyframes slebew {
+  0%, 100%{
+    transform: translateX(-100%);
+  }
+  100%{
+    opacity: 0;
+  }
+  50%{
+    transform: translateX(200%);
+  }
+}
