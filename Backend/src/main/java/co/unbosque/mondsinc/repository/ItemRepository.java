@@ -1,7 +1,9 @@
-package co.unbosque.mondsinc.controller;
+package co.unbosque.mondsinc.repository;
 
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import co.unbosque.mondsinc.models.GroceryItem;
 
 
 public interface ItemRepository extends MongoRepository<GroceryItem, String> {

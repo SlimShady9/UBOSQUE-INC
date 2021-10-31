@@ -7,8 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import co.unbosque.mondsinc.models.GroceryItem;
+import co.unbosque.mondsinc.repository.ItemRepository;
+
 @SpringBootApplication
-@EnableMongoRepositories
+@EnableMongoRepositories(basePackageClasses = {ItemRepository.class})
 @ComponentScan
 public class MdbSpringBootApplication implements CommandLineRunner {
 

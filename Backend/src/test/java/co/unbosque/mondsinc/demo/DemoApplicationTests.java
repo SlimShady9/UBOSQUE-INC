@@ -1,4 +1,4 @@
-package com.unbosque.mondsinc.demo;
+package co.unbosque.mondsinc.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
