@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.unbosque.mondsinc.Exceptions.ResourceNotFoundException;
+import co.unbosque.mondsinc.Utils.Exceptions.ResourceNotFoundException;
 import co.unbosque.mondsinc.models.User;
 import co.unbosque.mondsinc.repository.UserRepository;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,11 +42,13 @@ public class UserController {
         User user = userRepository.findById(userId)
         .orElseThrow(() -> new ResourceNotFoundException(String.format("El usuario con id %s no fue encontrado", userId)));
         return ResponseEntity.ok().body(user);
-
     }
 
     @PostMapping("/users")
     public User createEmployee(@RequestBody User user) {
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        String hash = argon2.hash(1, 1024, 1, user.getClave().toCharArray());
+        user.setClave(hash);
         return userRepository.save(user);
     }
 
@@ -58,7 +62,7 @@ public class UserController {
         user.setNombre(userDetails.getNombre());
         user.setTipoDocumento(userDetails.getTipoDocumento());
         final User updatedUser = userRepository.save(user);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok().body(updatedUser);
     }
     
     @DeleteMapping("/users/{id}")

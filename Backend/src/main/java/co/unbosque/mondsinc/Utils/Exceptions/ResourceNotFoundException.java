@@ -1,4 +1,4 @@
-package co.unbosque.mondsinc.Exceptions;
+package co.unbosque.mondsinc.Utils.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
