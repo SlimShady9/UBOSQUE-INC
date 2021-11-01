@@ -13,6 +13,7 @@ public class User {
     @Id
     private String id;
 
+    @Indexed(unique=true)
     private String documento;
 
     @Indexed(unique=true)
@@ -20,19 +21,20 @@ public class User {
     private String tipoDocumento;
     private String nombre;
     private String clave;
+    private short rol;
 
     @DBRef(lazy = true)
     private List<Documment> documments;
 
 
-    public User(String documento, String correo, String tipoDocumento, String nombre, String clave, List<Documment> documments) {
-        this.id = id;
+    public User(String documento, String correo, String tipoDocumento, String nombre, String clave, List<Documment> documments, short rol) {
         this.documento = documento;
         this.correo = correo;
         this.tipoDocumento = tipoDocumento;
         this.nombre = nombre;
         this.clave = clave;
         this.documments = documments;
+        this.rol = rol;
     }
     
 
@@ -90,6 +92,14 @@ public class User {
 
     public void setDocumments(List<Documment> documments) {
         this.documments = documments;
+    }
+
+    public short getRol() {
+        return this.rol;
+    }
+
+    public void setRol(short rol) {
+        this.rol = rol;
     }
 
     @Override
