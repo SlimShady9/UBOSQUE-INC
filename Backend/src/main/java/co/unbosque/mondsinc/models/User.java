@@ -1,7 +1,10 @@
 package co.unbosque.mondsinc.models;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("user")
@@ -18,13 +21,20 @@ public class User {
     private String nombre;
     private String clave;
 
-    public User(String documento, String correo, String tipoDocumento, String nombre, String clave) {
+    @DBRef(lazy = true)
+    private List<Documment> documments;
+
+
+    public User(String documento, String correo, String tipoDocumento, String nombre, String clave, List<Documment> documments) {
+        this.id = id;
         this.documento = documento;
         this.correo = correo;
         this.tipoDocumento = tipoDocumento;
         this.nombre = nombre;
         this.clave = clave;
+        this.documments = documments;
     }
+    
 
     public String getId() {
         return this.id;
@@ -74,6 +84,14 @@ public class User {
         this.clave = clave;
     }
 
+    public List<Documment> getDocumments() {
+        return this.documments;
+    }
+
+    public void setDocumments(List<Documment> documments) {
+        this.documments = documments;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -83,8 +101,11 @@ public class User {
             ", tipoDocumento='" + getTipoDocumento() + "'" +
             ", nombre='" + getNombre() + "'" +
             ", clave='" + getClave() + "'" +
+            ", documments='" + getDocumments() + "'" +
             "}";
     }
+
+    
     
 
 }
