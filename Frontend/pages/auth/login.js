@@ -22,12 +22,12 @@ export default function Login() {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Email
+                      Correo
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
+                      placeholder="Ingrese su correo"
                     />
                   </div>
 
@@ -36,12 +36,12 @@ export default function Login() {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Password
+                      Contraseña
                     </label>
                     <input
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Password"
+                      placeholder="Ingrese su contraseña"
                     />
                   </div>
                   <div>
@@ -52,7 +52,7 @@ export default function Login() {
                         className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
                       />
                       <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        Remember me
+                        Recuerdame si mi guitarra oyes llorar
                       </span>
                     </label>
                   </div>
@@ -62,7 +62,7 @@ export default function Login() {
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="button"
                     >
-                      Sign In
+                      Inciar sesión
                     </button>
                   </div>
                 </form>
@@ -75,13 +75,13 @@ export default function Login() {
                   onClick={(e) => e.preventDefault()}
                   className="text-blueGray-200"
                 >
-                  <small>Forgot password?</small>
+                  <small>Olvidaste la contraseña?</small>
                 </a>
               </div>
               <div className="w-1/2 text-right">
                 <Link href="/auth/register">
                   <a href="#pablo" className="text-blueGray-200">
-                    <small>Create new account</small>
+                    <small>Crear nueva cuenta</small>
                   </a>
                 </Link>
               </div>
