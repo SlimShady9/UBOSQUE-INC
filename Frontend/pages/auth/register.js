@@ -58,11 +58,11 @@ export default function Register() {
                     />
                   </div>
                   
-                  <div className="flex flex-col">
-                    <label className="inline-flex items-center cursor-pointer">
+                  <div className="flex flex-col relative w-full mb-3">
+                    <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Tipo documento
                     </label>
-                      <select>
+                      <select className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
                         <option>
                           C.C
                         </option>
@@ -105,7 +105,7 @@ export default function Register() {
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="button"
                     >
-                      Create Account
+                      Registrarse
                     </button>
                   </div>
                 </form>
