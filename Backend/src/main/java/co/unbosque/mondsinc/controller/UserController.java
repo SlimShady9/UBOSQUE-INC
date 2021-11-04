@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import de.mkammerer.argon2.Argon2Factory;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = {"http://localhost:3000", "https://mondsinc.vercel.app"})
 @EnableMongoRepositories(basePackageClasses = {UserRepository.class})
 public class UserController {
 
@@ -44,7 +46,7 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping("/users")
+    @PostMapping("users")
     public User createEmployee(@RequestBody User user) {
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
         String hash = argon2.hash(1, 1024, 1, user.getClave().toCharArray());
@@ -52,7 +54,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("users/{id}")
     public ResponseEntity<User> updateEmployee(@PathVariable(value = "id") String userId,
         @RequestBody User userDetails) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
@@ -66,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok().body(updatedUser);
     }
     
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("users/{id}")
     public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") String userId)
     throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
