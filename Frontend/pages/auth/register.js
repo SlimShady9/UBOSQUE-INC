@@ -12,7 +12,7 @@ export default function Register() {
     documento: '',
     tipoDocumento: 'C.C',
     clave: '',
-    rol: 1,
+    rol: 2,
   })
   const handleInputChange = (event) => {
     const name = event.target.name;
