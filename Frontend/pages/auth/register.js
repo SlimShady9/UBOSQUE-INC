@@ -100,7 +100,15 @@ export default function Register() {
                     >
                       Contraseña
                     </label>
-                    <input name="contraseña" type="password" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                    <input
+                      type="password"
+                      name="clave"
+                      minLength="8"
+                      maxLength="12"
+                      required
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      placeholder="Ingresar contraseña"
+                    />
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -110,8 +118,12 @@ export default function Register() {
                     >
                       Confirmar contraseña
                     </label>
-                    <input name="confirmar" type="password" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-
+                    <input
+                      type="password"
+                      required
+                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                      placeholder="Confirmar contraseña"
+                    />
                   </div>
 
                   <div className="text-center mt-6">
