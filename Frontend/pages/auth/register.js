@@ -1,17 +1,14 @@
 import React from "react";
-import { useState } from "react";
-import { ErrorMessage } from "@hookform/error-message";
-import { useForm } from 'react-hook-form';
 // layout for page
 
 import Auth from "layouts/Auth.js";
 
 export default function Register() {
   
-  const [confirmaClave, setConfirmaClave] = useState('');
   async function registrarUsuario(event) {
-
-    if (datosUsuario.clave !== confirmaClave) {
+    event.preventDefault();
+    console.log(event.target.nombre.value)
+    if (event.target.contraseña.value !== event.target.confirmar.value) {
       alert('Sus clave no coinciden >:c')
     } else {
       const res = await fetch('http://localhost:8080/api/v1/users/', {
@@ -19,7 +16,14 @@ export default function Register() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(datosUsuario)
+        body: JSON.stringify({ 
+          nombre: event.target.nombre.value,
+          email: event.target.email.value,
+          documento: event.target.documento.value,
+          tipoDocumento: event.target.tipo.value,
+          clave: event.target.contraseña.value,
+          rol: 2
+        })
       })
       if (res.ok) {
         alert('Usuario registrado exitosamente')
@@ -30,12 +34,6 @@ export default function Register() {
     }
   }
   // validaciones
-  const {register, handleSubmit, formState: { errors } } = useForm({criteriaMode: "all"});
-
-  const onSubmit = (data, e) => {
-    console.log(data)
-    e.target.reset()
-  }
 
   return (
     <>
@@ -47,7 +45,7 @@ export default function Register() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <h4 className="p-4">Registrate</h4>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={registrarUsuario}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -55,19 +53,7 @@ export default function Register() {
                     >
                       Nombre
                     </label>
-                    <input {...register('Nombre', { required: 'debe llenar el campo'} )}  
-                    pattern={ '[a-zA-Z]+[a-zA-Z]'} required  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                    <ErrorMessage
-                      errors={errors}
-                      name="Nombre"
-                      render={({ messages }) => {
-                        console.log("messages", messages);
-                        return messages
-                          ? Object.entries(messages).map(([type, message]) => (
-                              <p key={type} className="m-2 text-xs">{message}</p>
-                            )): <p>no hay error</p>
-                      }}
-                    />
+                    <input name = "nombre" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -77,19 +63,9 @@ export default function Register() {
                     >
                       Email
                     </label>
-                    <input {...register('Email', { required:'debe llenar el campo' })} pattern={ '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,'}
+                    <input name = "email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                     required  type="email"  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                    <ErrorMessage
-                      errors={errors}
-                      name="Email"
-                      render={({ messages }) => {
-                        console.log("messages", messages);
-                        return messages
-                          ? Object.entries(messages).map(([type, message]) => (
-                              <p key={type} className="m-2 text-xs">{message}</p>
-                            )): <p>no hay error</p>
-                      }}
-                    />
+  
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -99,44 +75,22 @@ export default function Register() {
                     >
                       Documento
                     </label>
-                    <input {...register('Documento', { required: true.valueOf, required:'debe llenar el campo' })} pattern={ '((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])'}
+                    <input name="documento" pattern={ '((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])'}
                     required  type="number" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                    <ErrorMessage
-                      errors={errors}
-                      name="Documento"
-                      render={({ messages }) => {
-                        console.log("messages", messages);
-                        return messages
-                          ? Object.entries(messages).map(([type, message]) => (
-                              <p key={type} className="m-2 text-xs">{message}</p>
-                            )): <p>no hay error</p>
-                      }}
-                    />
                   </div>
                   
                   <div className="flex flex-col relative w-full mb-3">
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Tipo documento
                     </label>
-                    <select {...register('Tipo', { required: 'debe seleccionar el campo' })}  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" >
-                        <option value="C.C">
-                          C.C
+                    <select name="tipo" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" >
+                        <option value="CC">
+                          CC
                         </option>
-                        <option value="NIP">
-                          NIP
+                        <option value="NIT">
+                          NIT
                         </option>
                       </select>
-                      <ErrorMessage
-                      errors={errors}
-                      name="Tipo"
-                      render={({ messages }) => {
-                        console.log("messages", messages);
-                        return messages
-                          ? Object.entries(messages).map(([type, message]) => (
-                              <p key={type} className="m-2 text-xs">{message}</p>
-                            )): <p>no hay error</p>
-                      }}
-                    />
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -146,18 +100,7 @@ export default function Register() {
                     >
                       Contraseña
                     </label>
-                    <input {...register('Contraseña', { required: 'debe llenar el campo' })} className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                    <ErrorMessage
-                      errors={errors}
-                      name="Contraseña"
-                      render={({ messages }) => {
-                        console.log("messages", messages);
-                        return messages
-                          ? Object.entries(messages).map(([type, message]) => (
-                              <p key={type} className="m-2 text-xs">{message}</p>
-                            )): <p>no hay error</p>
-                      }}
-                    />
+                    <input name="contraseña" type="password" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -167,22 +110,12 @@ export default function Register() {
                     >
                       Confirmar contraseña
                     </label>
-                    <input {...register('Confirmar', { required: 'debe llenar el campo' })} className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                    <ErrorMessage
-                      errors={errors}
-                      name="Confirmar"
-                      render={({ messages }) => {
-                        console.log("messages", messages);
-                        return messages
-                          ? Object.entries(messages).map(([type, message]) => (
-                              <p key={type} className="m-2 text-xs">{message}</p>
-                            )): <p>no hay error</p>
-                      }}
-                    />
+                    <input name="confirmar" type="password" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+
                   </div>
 
                   <div className="text-center mt-6">
-                    <button
+                    <button 
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="submit"
                     >
