@@ -20,7 +20,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
 @RestController
-@CrossOrigin(origins = {"https://localhost:3000", "https://mondsinc.vercel.app"})
+@CrossOrigin(origins = {"https://localhost:3000", "https://mondsinc.vercel.app", "http://localhost:3000"})
 @RequestMapping("/api/v1/auth")
 @ComponentScan(basePackageClasses = {JWTUtil.class})
 public class AuthController {
