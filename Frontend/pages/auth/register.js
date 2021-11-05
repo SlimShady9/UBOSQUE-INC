@@ -103,8 +103,6 @@ export default function Register() {
                     <input
                       type="password"
                       name="clave"
-                      value={datosUsuario.clave}
-                      onChange={handleInputChange}
                       minLength="8"
                       maxLength="12"
                       required
@@ -122,8 +120,6 @@ export default function Register() {
                     </label>
                     <input
                       type="password"
-                      value={confirmaClave}
-                      onChange={e => setConfirmaClave(e.target.value)}
                       required
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Confirmar contraseña"
