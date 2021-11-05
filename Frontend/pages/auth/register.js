@@ -1,27 +1,16 @@
 import React from "react";
 import { useState } from "react";
-
+import { ErrorMessage } from "@hookform/error-message";
+import { useForm } from 'react-hook-form';
 // layout for page
 
 import Auth from "layouts/Auth.js";
 
 export default function Register() {
-  const [datosUsuario, setDatosUsuarios] = useState({
-    nombre: '',
-    correo: '',
-    documento: '',
-    tipoDocumento: 'C.C',
-    clave: '',
-    rol: 1,
-  })
-  const handleInputChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setDatosUsuarios(values => ({...values, [name]: value}))
-  }
+  
   const [confirmaClave, setConfirmaClave] = useState('');
   async function registrarUsuario(event) {
-    event.preventDefault();
+
     if (datosUsuario.clave !== confirmaClave) {
       alert('Sus clave no coinciden >:c')
     } else {
@@ -33,12 +22,19 @@ export default function Register() {
         body: JSON.stringify(datosUsuario)
       })
       if (res.ok) {
-        alert('Usuario registrado exitosamente :)')
+        alert('Usuario registrado exitosamente')
         console.log(res);
       } else {
-        alert('Usuario no registrado exitosamente :(')
+        alert('Usuario no registrado')
       }
     }
+  }
+  // validaciones
+  const {register, handleSubmit, formState: { errors } } = useForm({criteriaMode: "all"});
+
+  const onSubmit = (data, e) => {
+    console.log(data)
+    e.target.reset()
   }
 
   return (
@@ -51,7 +47,7 @@ export default function Register() {
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <h4 className="p-4">Registrate</h4>
                 </div>
-                <form onSubmit={registrarUsuario}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -59,13 +55,18 @@ export default function Register() {
                     >
                       Nombre
                     </label>
-                    <input
-                      type="text"
-                      name="nombre"
-                      value={datosUsuario.nombre}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar nombre"
+                    <input {...register('Nombre', { required: 'debe llenar el campo'} )}  
+                    pattern={ '[a-zA-Z]+[a-zA-Z]'} required  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                    <ErrorMessage
+                      errors={errors}
+                      name="Nombre"
+                      render={({ messages }) => {
+                        console.log("messages", messages);
+                        return messages
+                          ? Object.entries(messages).map(([type, message]) => (
+                              <p key={type} className="m-2 text-xs">{message}</p>
+                            )): <p>no hay error</p>
+                      }}
                     />
                   </div>
 
@@ -76,13 +77,18 @@ export default function Register() {
                     >
                       Email
                     </label>
-                    <input
-                      type="text"
-                      name="correo"
-                      value={datosUsuario.correo}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar Email"
+                    <input {...register('Email', { required:'debe llenar el campo' })} pattern={ '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,'}
+                    required  type="email"  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                    <ErrorMessage
+                      errors={errors}
+                      name="Email"
+                      render={({ messages }) => {
+                        console.log("messages", messages);
+                        return messages
+                          ? Object.entries(messages).map(([type, message]) => (
+                              <p key={type} className="m-2 text-xs">{message}</p>
+                            )): <p>no hay error</p>
+                      }}
                     />
                   </div>
 
@@ -93,13 +99,18 @@ export default function Register() {
                     >
                       Documento
                     </label>
-                    <input
-                      type="text"
-                      name="documento"
-                      value={datosUsuario.documento}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar documento"
+                    <input {...register('Documento', { required: true.valueOf, required:'debe llenar el campo' })} pattern={ '((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])'}
+                    required  type="number" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                    <ErrorMessage
+                      errors={errors}
+                      name="Documento"
+                      render={({ messages }) => {
+                        console.log("messages", messages);
+                        return messages
+                          ? Object.entries(messages).map(([type, message]) => (
+                              <p key={type} className="m-2 text-xs">{message}</p>
+                            )): <p>no hay error</p>
+                      }}
                     />
                   </div>
                   
@@ -107,11 +118,7 @@ export default function Register() {
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Tipo documento
                     </label>
-                      <select
-                      value={datosUsuario.tipoDocumento}
-                      name="tipoDocumento"
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
+                    <select {...register('Tipo', { required: 'debe seleccionar el campo' })}  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" >
                         <option value="C.C">
                           C.C
                         </option>
@@ -119,6 +126,17 @@ export default function Register() {
                           NIP
                         </option>
                       </select>
+                      <ErrorMessage
+                      errors={errors}
+                      name="Tipo"
+                      render={({ messages }) => {
+                        console.log("messages", messages);
+                        return messages
+                          ? Object.entries(messages).map(([type, message]) => (
+                              <p key={type} className="m-2 text-xs">{message}</p>
+                            )): <p>no hay error</p>
+                      }}
+                    />
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -128,13 +146,17 @@ export default function Register() {
                     >
                       Contraseña
                     </label>
-                    <input
-                      type="password"
-                      name="clave"
-                      value={datosUsuario.clave}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar contraseña"
+                    <input {...register('Contraseña', { required: 'debe llenar el campo' })} className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                    <ErrorMessage
+                      errors={errors}
+                      name="Contraseña"
+                      render={({ messages }) => {
+                        console.log("messages", messages);
+                        return messages
+                          ? Object.entries(messages).map(([type, message]) => (
+                              <p key={type} className="m-2 text-xs">{message}</p>
+                            )): <p>no hay error</p>
+                      }}
                     />
                   </div>
 
@@ -145,12 +167,17 @@ export default function Register() {
                     >
                       Confirmar contraseña
                     </label>
-                    <input
-                      type="password"
-                      value={confirmaClave}
-                      onChange={e => setConfirmaClave(e.target.value)}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Confirmar contraseña"
+                    <input {...register('Confirmar', { required: 'debe llenar el campo' })} className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                    <ErrorMessage
+                      errors={errors}
+                      name="Confirmar"
+                      render={({ messages }) => {
+                        console.log("messages", messages);
+                        return messages
+                          ? Object.entries(messages).map(([type, message]) => (
+                              <p key={type} className="m-2 text-xs">{message}</p>
+                            )): <p>no hay error</p>
+                      }}
                     />
                   </div>
 
