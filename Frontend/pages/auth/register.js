@@ -8,8 +8,8 @@ export default function Register() {
   async function registrarUsuario(event) {
     event.preventDefault();
     console.log(event.target.nombre.value)
-    if (event.target.contraseña.value !== event.target.confirmar.value) {
-      alert('Sus clave no coinciden >:c')
+    if (event.target.clave.value !== event.target.confirmar.value) {
+      alert('Sus claves no coinciden')
     } else {
       const res = await fetch('http://localhost:8080/api/v1/users/', {
         method: "POST",
@@ -21,7 +21,7 @@ export default function Register() {
           email: event.target.email.value,
           documento: event.target.documento.value,
           tipoDocumento: event.target.tipo.value,
-          clave: event.target.contraseña.value,
+          clave: event.target.clave.value,
           rol: 2
         })
       })
