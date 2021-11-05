@@ -133,6 +133,9 @@ export default function Register() {
                       name="clave"
                       value={datosUsuario.clave}
                       onChange={handleInputChange}
+                      minLength="8"
+                      maxLength="12"
+                      required
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Ingresar contraseña"
                     />
@@ -149,6 +152,7 @@ export default function Register() {
                       type="password"
                       value={confirmaClave}
                       onChange={e => setConfirmaClave(e.target.value)}
+                      required
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Confirmar contraseña"
                     />
