@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useState } from "react";
 import Router from "next/router";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 // layout for page
 
@@ -18,17 +19,24 @@ export default function Login() {
       correo: correo,
       clave: clave,
     };
-    const res = await fetch('https://mondsinc.herokuapp.com/api/v1/auth/authentication/', {
+    const res = await fetch('http://localhost:8080/api/v1/auth/authentication/', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(usuario),
     })
+    const data = await res.json();
     if (res.ok == true) {
-      const data = await res.json();
-      Router.push("/admin/dashboard")
-    } else throw new Error("Credenciales invalidas")
+      console.log(data);
+      localStorage.setItem('Token', data.Token);
+      localStorage.setItem('User', JSON.stringify(data.User));
+      console.log(localStorage.getItem('User'));
+      const ruta = data.User.rol == 1 ? "/admin/dashboard" : "/user/dashboard";
+      Router.push(ruta)
+    } else {
+      console.log(data);
+    }
   }
   return (
     <>

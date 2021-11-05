@@ -1,28 +1,14 @@
 import React from "react";
-import { useState } from "react";
-
 // layout for page
 
 import Auth from "layouts/Auth.js";
 
 export default function Register() {
-  const [datosUsuario, setDatosUsuarios] = useState({
-    nombre: '',
-    correo: '',
-    documento: '',
-    tipoDocumento: 'C.C',
-    clave: '',
-    rol: 1,
-  })
-  const handleInputChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setDatosUsuarios(values => ({...values, [name]: value}))
-  }
-  const [confirmaClave, setConfirmaClave] = useState('');
+  
   async function registrarUsuario(event) {
     event.preventDefault();
-    if (datosUsuario.clave !== confirmaClave) {
+    console.log(event.target.nombre.value)
+    if (event.target.contraseña.value !== event.target.confirmar.value) {
       alert('Sus clave no coinciden >:c')
     } else {
       const res = await fetch('http://localhost:8080/api/v1/users/', {
@@ -30,16 +16,24 @@ export default function Register() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(datosUsuario)
+        body: JSON.stringify({ 
+          nombre: event.target.nombre.value,
+          email: event.target.email.value,
+          documento: event.target.documento.value,
+          tipoDocumento: event.target.tipo.value,
+          clave: event.target.contraseña.value,
+          rol: 2
+        })
       })
       if (res.ok) {
-        alert('Usuario registrado exitosamente :)')
+        alert('Usuario registrado exitosamente')
         console.log(res);
       } else {
-        alert('Usuario no registrado exitosamente :(')
+        alert('Usuario no registrado')
       }
     }
   }
+  // validaciones
 
   return (
     <>
@@ -59,14 +53,7 @@ export default function Register() {
                     >
                       Nombre
                     </label>
-                    <input
-                      type="text"
-                      name="nombre"
-                      value={datosUsuario.nombre}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar nombre"
-                    />
+                    <input name = "nombre" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -76,14 +63,9 @@ export default function Register() {
                     >
                       Email
                     </label>
-                    <input
-                      type="text"
-                      name="correo"
-                      value={datosUsuario.correo}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar Email"
-                    />
+                    <input name = "email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    required  type="email"  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+  
                   </div>
 
                   <div className="relative w-full mb-3">
@@ -93,30 +75,20 @@ export default function Register() {
                     >
                       Documento
                     </label>
-                    <input
-                      type="text"
-                      name="documento"
-                      value={datosUsuario.documento}
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      placeholder="Ingresar documento"
-                    />
+                    <input name="documento" pattern={ '((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])'}
+                    required  type="number" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                   </div>
                   
                   <div className="flex flex-col relative w-full mb-3">
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Tipo documento
                     </label>
-                      <select
-                      value={datosUsuario.tipoDocumento}
-                      name="tipoDocumento"
-                      onChange={handleInputChange}
-                      className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
-                        <option value="C.C">
-                          C.C
+                    <select name="tipo" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" >
+                        <option value="CC">
+                          CC
                         </option>
-                        <option value="NIP">
-                          NIP
+                        <option value="NIT">
+                          NIT
                         </option>
                       </select>
                   </div>
@@ -159,7 +131,7 @@ export default function Register() {
                   </div>
 
                   <div className="text-center mt-6">
-                    <button
+                    <button 
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="submit"
                     >
