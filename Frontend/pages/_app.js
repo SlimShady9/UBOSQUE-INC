@@ -17,9 +17,6 @@ Router.events.on("routeChangeStart", (url) => {
     document.getElementById("page-transition")
   );
 });
-Router.events.on("routeChangeStart", (url) => {
-  
-})
 Router.events.on("routeChangeComplete", () => {
   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
   document.body.classList.remove("body-page-transition");
@@ -31,6 +28,7 @@ Router.events.on("routeChangeError", () => {
 
 export default class MyApp extends App {
   componentDidMount() {
+    
     let comment = document.createComment(`
 
 =========================================================
@@ -74,7 +72,6 @@ export default class MyApp extends App {
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
           <title>MondsInc</title>
-          <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
         </Head>
         <Layout>
           <Component {...pageProps} />
