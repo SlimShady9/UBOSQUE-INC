@@ -2,8 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useState } from "react";
 import Router from "next/router";
-import Swal from 'sweetalert2/dist/sweetalert2.js'
-
+import Swal from 'sweetalert2';
 // layout for page
 
 import Auth from "layouts/Auth.js";
@@ -35,7 +34,7 @@ export default function Login() {
       const ruta = data.User.rol == 1 ? "/admin/dashboard" : "/user/dashboard";
       Router.push(ruta)
     } else {
-      console.log(data);
+      Swal.fire("Error", data.Error, "error")
     }
   }
   return (

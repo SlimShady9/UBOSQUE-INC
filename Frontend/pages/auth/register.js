@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from 'sweetalert2';
 // layout for page
 
 import Auth from "layouts/Auth.js";
@@ -7,9 +8,8 @@ export default function Register() {
   
   async function registrarUsuario(event) {
     event.preventDefault();
-    console.log(event.target.nombre.value)
-    if (event.target.contraseña.value !== event.target.confirmar.value) {
-      alert('Sus clave no coinciden >:c')
+    if (event.target.clave.value !== event.target.confirmar.value) {
+      Swal.fire('Error', 'Sus claves no coinciden', 'error')
     } else {
       const res = await fetch('http://localhost:8080/api/v1/users/', {
         method: "POST",
@@ -21,15 +21,14 @@ export default function Register() {
           email: event.target.email.value,
           documento: event.target.documento.value,
           tipoDocumento: event.target.tipo.value,
-          clave: event.target.contraseña.value,
+          clave: event.target.clave.value,
           rol: 2
         })
       })
       if (res.ok) {
-        alert('Usuario registrado exitosamente')
-        console.log(res);
+        Swal.fire('Exito', 'Usuario registrado exitosamente', 'success')
       } else {
-        alert('Usuario no registrado')
+        Swal.fire('Error', 'Usuario no registrado', 'error')
       }
     }
   }
@@ -121,6 +120,7 @@ export default function Register() {
                     <input
                       type="password"
                       required
+                      name="confirmar"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Confirmar contraseña"
                     />
