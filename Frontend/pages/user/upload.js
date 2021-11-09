@@ -1,7 +1,7 @@
 import React from "react";
-import Auth from "layouts/Auth.js";
 import { useState } from "react";
 import Swal from 'sweetalert2';
+import Link from "next/dist/client/link";
 // layout for page
 
 export default function Upload() {
@@ -14,13 +14,14 @@ export default function Upload() {
   }
   return (
     <>
-     <div className="container mx-auto h-full">
+     <div className=" w-screen h-screen  grid items-center bg-blueGray-800 bg-no-repeat bg-cover" style={{ backgroundImage: "url('/img/register_bg_2.png')", }}>
         <div className="flex content-center items-center justify-center h-full">
           <div className="w-full lg:w-6/12">
             <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
-              <div className="flex justify-center p-4">
-                <div className="text-blueGray-400 text-center mb-3 font-bold"></div>
+              <div className="flex justify-between p-4">
                   <h4 className="text-xl text-gray-500 font-bold">Subir documento</h4>
+                  <Link href="/user/tables" ><p className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded 
+                  shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1  ease-linear transition-all duration-150">Volver</p></Link>
               </div>
               <form className="p-4" onSubmit={subirArchivo}>
                 <div className="relative w-full mb-3">
@@ -72,5 +73,3 @@ export default function Upload() {
     </>
   );
 }
-
-Upload.layout = Auth;
