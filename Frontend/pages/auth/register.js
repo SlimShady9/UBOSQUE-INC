@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from 'sweetalert2';
 // layout for page
 
 import Auth from "layouts/Auth.js";
@@ -7,9 +8,8 @@ export default function Register() {
   
   async function registrarUsuario(event) {
     event.preventDefault();
-    console.log(event.target.nombre.value)
     if (event.target.clave.value !== event.target.confirmar.value) {
-      alert('Sus claves no coinciden')
+      Swal.fire('Error', 'Sus claves no coinciden', 'error')
     } else {
       const res = await fetch('http://localhost:8080/api/v1/users/', {
         method: "POST",
@@ -26,10 +26,9 @@ export default function Register() {
         })
       })
       if (res.ok) {
-        alert('Usuario registrado exitosamente')
-        console.log(res);
+        Swal.fire('Exito', 'Usuario registrado exitosamente', 'success')
       } else {
-        alert('Usuario no registrado')
+        Swal.fire('Error', 'Usuario no registrado', 'error')
       }
     }
   }
