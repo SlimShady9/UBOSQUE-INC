@@ -9,7 +9,16 @@ export default function Upload() {
   const subirArchivo = async event => {
     event.preventDefault();
     if (event.target.archivo.value) {
-      console.log('Todo gucci');
+      const datos = new FormData();
+      datos.append("solicitud", event.target.solicitud.value)
+      datos.append("referencia", event.target.referencia.value)
+      datos.append("documento", event.target.archivo.files[0])
+      const res = await fetch("http://localhost:8080/api/v1/file/upload/", {
+        method: 'POST',
+        body: datos
+      })
+      if (res.ok) Swal.fire("Exito", "El documento ha sudo subido exitosamente", "success")
+      else Swal.fire("Error del servidor", "Intentelo más tarde", "error")
     } else Swal.fire("Error", "Debe seleccionar un archivo valido para subir", "error")
   }
   return (
