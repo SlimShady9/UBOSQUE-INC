@@ -18,7 +18,7 @@ export default function Register() {
         },
         body: JSON.stringify({ 
           nombre: event.target.nombre.value,
-          email: event.target.email.value,
+          correo: event.target.email.value,
           documento: event.target.documento.value,
           tipoDocumento: event.target.tipo.value,
           clave: event.target.clave.value,
