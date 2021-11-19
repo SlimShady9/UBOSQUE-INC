@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
@@ -70,21 +71,29 @@ public class FileController {
             nrow++;
             int column = 0;
 			XSSFRow row=(XSSFRow) iterator.next();
-			
+			int FSP = 0;
+            int IBC = 0;
+            int total = 0;
+            double pension = 0;
+            double salud = 0;
+            double arl = 0;
 			Iterator cellIterator=row.cellIterator();
 			
 			while(cellIterator.hasNext())
 			{
                 column++;
                 String valor = "";
+                
 				XSSFCell cell=(XSSFCell) cellIterator.next();
 	
 				switch(cell.getCellType())
 				{
-                case STRING: System.out.print(cell.getStringCellValue()+"'"+nrow+"'"+column); break;
-                case NUMERIC: System.out.print(cell.getNumericCellValue()+"Number'"+nrow+"'"+column);break;
+                //case STRING: System.out.print(cell.getStringCellValue()+"'"+nrow+"'"+column); break;
+                //case NUMERIC: System.out.print(cell.getNumericCellValue()+"Number'"+nrow+"'"+column);break;
                 //case BOOLEAN: System.out.print(cell.getBooleanCellValue()+"'"+nrow+"'"+column); break;
-                //case STRING: valor = cell.getStringCellValue(); break;
+                case STRING: valor = cell.getStringCellValue(); break;
+                case NUMERIC: valor = String.valueOf(cell.getNumericCellValue()); valor = valor.substring(0, valor.length() - 2); valor.replace(".","");  break;
+                case BLANK: valor = "";
                 //case NUMERIC: valor = String.valueOf(cell.getNumericCellValue()); valor = valor.substring(0, valor.length() - 2); valor.replace(".","");  break;
                 //case BOOLEAN: System.out.print(cell.getBooleanCellValue()+"'"+nrow+"'"+column); break;
 				}
@@ -101,13 +110,26 @@ public class FileController {
                         case 4: referencia = valor; break;
                         case 5: solicitud = valor; break;
                     }
+
+                    switch (tipoDoc) {
+                        case "NI": pension = 4; salud = 4; break;
+                        case "CC": pension = 8.5; salud = 12; arl = 0.52; break;
+                    }
                 }
+
+                if (nrow > 5) {
+                    if (column > 11 || column < 21 || cell.getCellType() == CellType.NUMERIC) {
+                        total = total + Integer.parseInt(valor);
+                    }
+                }
+
+
 				System.out.print(" |  ");
 			}
 			System.out.println();
-
+            System.out.println("tal:"+total);
 		}
 
-        System.out.println("Tipo de documento:"+tipoDoc+", Numero Documento:"+numDoc+", Razon social:"+razon+", Referencia:"+referencia+", Solicitud:"+solicitud);
+        System.out.println("Tipo de documento:"+tipoDoc+", Numero Documento:"+numDoc+", Razon social:"+razon+", Referencia:"+referencia+", Solicitud:"+solicitud );
     }
 }
