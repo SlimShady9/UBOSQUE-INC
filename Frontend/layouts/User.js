@@ -3,10 +3,7 @@ import Router from "next/router";
 import { useEffect } from "react";
 // components
 
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Sidebar from "components/Sidebar/UserSidebar";
-import HeaderStats from "components/Headers/HeaderStats.js";
-import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 export default function User({ children }) {
   useEffect(() => {
@@ -18,7 +15,7 @@ export default function User({ children }) {
   return (
     <>
       <Sidebar />
-      <div className="relative md:ml-64 bg-blueGray-100">
+      <div className="relative md:ml-64 bg-blueGray-100 h-screen">
 
         <div className="py-8 px-4 md:px-10 mx-auto w-full">
           {children}

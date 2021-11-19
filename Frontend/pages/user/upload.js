@@ -8,18 +8,19 @@ export default function Upload() {
   const [nameFile, setNameFile] = useState("Selecciona un documento");
   const subirArchivo = async event => {
     event.preventDefault();
-    if (event.target.archivo.value) {
+    const nDocumento = event.target.archivo.value.split('.')
+    if (nDocumento[nDocumento.length-1] === 'xls' || nDocumento[nDocumento.length-1] === 'xlsx') {
       const datos = new FormData();
-      datos.append("solicitud", event.target.solicitud.value)
-      datos.append("referencia", event.target.referencia.value)
+      datos.append("solicitud", "zhi")
+      datos.append("referencia", "ño")
       datos.append("documento", event.target.archivo.files[0])
       const res = await fetch("http://localhost:8080/api/v1/file/upload/", {
         method: 'POST',
         body: datos
       })
-      if (res.ok) Swal.fire("Exito", "El documento ha sudo subido exitosamente", "success")
+      if (res.ok) Swal.fire("Exito", "El documento ha sido subido exitosamente", "success")
       else Swal.fire("Error del servidor", "Intentelo más tarde", "error")
-    } else Swal.fire("Error", "Debe seleccionar un archivo valido para subir", "error")
+    } else Swal.fire("Error", "Debe subir un archivo en formato excel", "error")
   }
   return (
     <>
@@ -33,17 +34,17 @@ export default function Upload() {
                   shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1  ease-linear transition-all duration-150">Volver</p></Link>
               </div>
               <form className="p-4" onSubmit={subirArchivo}>
-                <div className="relative w-full mb-3">
+                <div className="relative w-full mb-3 hidden">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
                       >
                         Tipo de solicitud
                       </label>
-                      <input name = "solicitud" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                      <input name = "solicitud" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}"  type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                 </div>
 
-                <div className="relative w-full mb-3">
+                <div className="relative w-full mb-3 hidden">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
@@ -51,7 +52,7 @@ export default function Upload() {
                       Número de referencia
                     </label>
                     <input name="referencia" pattern="d+"
-                    required min="0" type="number" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                     min="0" type="number" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                 </div>
 
                 <div className="relative w-full mb-3">
@@ -67,13 +68,10 @@ export default function Upload() {
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="submit"
-
                     >
                       Subir
                     </button>
                 </div>
-
-
               </form>
             </div> 
           </div>
