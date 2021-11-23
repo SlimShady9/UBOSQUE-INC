@@ -16,9 +16,6 @@ public class SaveDocument {
     private double salud;
     private double pension;
     private double arl;
-    
-    @DBRef
-    private Order order;
 
     public SaveDocument(double fsp, double ibc, double ingreso_total, double salud,
                         double pension, double arl){
@@ -87,14 +84,6 @@ public class SaveDocument {
         this.arl = arl;
     }
 
-    public Order getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -105,7 +94,6 @@ public class SaveDocument {
             ", salud='" + getSalud() + "'" +
             ", pension='" + getPension() + "'" +
             ", arl='" + getArl() + "'" +
-            ", order='" + getOrder() + "'" +
             "}";
     }
 
