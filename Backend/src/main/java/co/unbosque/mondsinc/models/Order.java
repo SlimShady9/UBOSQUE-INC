@@ -26,8 +26,12 @@ public class Order {
     private int daysLicensed;
     private int totalDays;
     private Date admissionDates;
+    
+    @DBRef
+    private SaveDocument saveDocument;
 
-    public Order(List<Concept> concepts, String numOrder, String tpDocumment, int number, String nomContributor, String post, Date data, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates) {
+    public Order(List<Concept> concepts, String numOrder, String tpDocumment, int number, String nomContributor, String post,
+    Date data, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates) {
 
         this.concepts = concepts;
         this.numOrder = numOrder;
