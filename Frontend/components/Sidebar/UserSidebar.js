@@ -8,6 +8,10 @@ import UserDropdown from "components/Dropdowns/UserDropdown.js";
 export default function UserSidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   const router = useRouter();
+  const logoutUser = () => {
+    router.push('/')
+    window.localStorage.clear()
+  }
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -142,69 +146,36 @@ export default function UserSidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Auth Layout Pages
+              Perfil
             </h6>
             {/* Navigation */}
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
-                <Link href="/auth/login">
-                  <a
-                    href="#pablo"
-                    className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  >
-                    <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
-                    Login
-                  </a>
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link href="/auth/register">
-                  <a
-                    href="#pablo"
-                    className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  >
-                    <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
-                    Register
-                  </a>
-                </Link>
-              </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              No Layout Pages
-            </h6>
-            {/* Navigation */}
-
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
-                <Link href="/landing">
-                  <a
-                    href="#pablo"
-                    className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  >
-                    <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
-                    Landing Page
-                  </a>
-                </Link>
-              </li>
-
-              <li className="items-center">
+              
+            <li className="items-center">
                 <Link href="/profile">
                   <a
                     href="#pablo"
                     className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
                   >
                     <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}
-                    Profile Page
+                    Ver perfil
                   </a>
                 </Link>
               </li>
+
+              <li className="items-center">
+                <button
+                  onClick={logoutUser}
+                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                >
+                  <i className="fas fa-sign-out-alt text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  Cerrar sesion
+                </button>
+              </li>
             </ul>
+
+            
 
           </div>
         </div>
