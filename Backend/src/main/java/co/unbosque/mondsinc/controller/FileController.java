@@ -2,6 +2,7 @@ package co.unbosque.mondsinc.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -58,8 +59,6 @@ public class FileController {
   
 		int rows=sheet.getLastRowNum();
 		int cols=sheet.getRow(1).getLastCellNum();
-		
-        int nrow = 0; 
 
         double SMMLV = 908526;
         String tipoDoc = "";
@@ -67,17 +66,15 @@ public class FileController {
         String razon = "";
         String referencia = "";
         String solicitud = "";
-		for(int r=0;r<=rows;r++)
+        ArrayList<String> conceptos = new ArrayList<String>();
+		for(int nrow=0;nrow<=rows;nrow++)
 		{
-			XSSFRow row=sheet.getRow(r);
+			XSSFRow row=sheet.getRow(nrow);
             if (row == null) {
                 // No entries in this row
                 // Handle empty
                 continue;
              }
-          
-            nrow++;
-            int column = 0;
 
             int orden = 0;
             String cedula = "";
@@ -89,11 +86,10 @@ public class FileController {
             double arl = 0;
 			
 			
-			for(int c=0;c<cols;c++)
+			for(int column=0;column<cols;column++)
 			{
-                column++;
                 String valor = "";
-                XSSFCell cell=row.getCell(c, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                XSSFCell cell=row.getCell(column, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 	
 				switch(cell.getCellType())
 				{
@@ -117,11 +113,19 @@ public class FileController {
                     }
                 } 
 
+                
+                
+                if (nrow == 5) {
+                            conceptos.add(valor);
+                } 
+
                 if (nrow > 5) {
                     if (column == 3 && cell.getCellType() == CellType.NUMERIC) {
                         cedula = valor;
                     }
                     if (column > 13 && column < 25 && cell.getCellType() == CellType.NUMERIC && valor != "") {
+                        String titulo = "";
+                        titulo = conceptos.get(column);
                         total = total + Integer.parseInt(valor);
                     }
                     if (column == 13 && column == 18 && column == 22 && column < 25 && cell.getCellType() == CellType.NUMERIC && valor != "") {
