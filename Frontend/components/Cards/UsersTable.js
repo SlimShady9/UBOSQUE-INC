@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
 // components
 
 import TableDropdown from "components/Dropdowns/TableDropdown.js";
 
 export default function UsersTable({ color }) {
   const [users, setUsers] = useState([]);
+  let pagination = 10
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  
+  const nextPagination = () => {
+    if (selectedUsers.length < users.length) {
+      setSelectedUsers(users.slice(selectedUsers.length, selectedUsers.length + pagination));
+      pagination += pagination;
+    }
+  };
+
+  const prevPagination = () => {
+    if (selectedUsers.length > 0) {
+      setSelectedUsers(users.slice(selectedUsers.length - pagination, selectedUsers.length));
+      pagination -= pagination;
+    }
+  };
+
 
   useEffect(() => {
     fetch("http://localhost:8080/api/v1/users")
@@ -14,6 +30,7 @@ export default function UsersTable({ color }) {
       .then((data) => {
         const data2 = data.filter((user) => user.id !== JSON.parse(localStorage.getItem("User")).id);
         setUsers(data2);
+        setSelectedUsers(data2.slice(0, pagination));
       });
   }, []);
 
@@ -92,6 +109,7 @@ export default function UsersTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
+                  Correo
                 </th>
                 <th
                   className={
@@ -104,7 +122,7 @@ export default function UsersTable({ color }) {
               </tr>
             </thead>
             <tbody>
-              {users.map((i) => (
+              {selectedUsers.map((i) => (
                 <tr>
                   <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs text-left whitespace-nowrap p-4">
                     <h4
@@ -122,33 +140,38 @@ export default function UsersTable({ color }) {
                     {i.tipoDocumento}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    <i className="fas fa-circle text-orange-500 mr-2"></i>{" "}
                     {i.documento}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {(i.rol === 1 ? "Administrador" : "Usuario")}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    <div className="flex items-center">
-                      <span className="mr-2">60%</span>
-                      <div className="relative w-full">
-                        <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                          <div
-                            style={{ width: "60%" }}
-                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
+                    {i.correo}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                    <TableDropdown id = {i.id}/>
+                    <TableDropdown id = {i.id} users={users} setUsers={setUsers} />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          
         </div>
+        <div className={"static w-full px-4 py-3 flex items-center justify-between border-t sm:px-6" + 
+        (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")}>
+            <div className="flex-1 flex justify-between sm:hidden">
+              <button onClick={() => prevPagination()}
+              className={"relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md"+
+              (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")}>
+                Anterior
+              </button>
+              <button onClick={() => nextPagination()}
+              className={"relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md"+
+              (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")}>
+                Siguiente
+              </button>
+            </div>
+          </div>
       </div>
     </>
   );

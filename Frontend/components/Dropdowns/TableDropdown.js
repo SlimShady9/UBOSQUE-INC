@@ -2,7 +2,7 @@ import React from "react";
 import { createPopper } from "@popperjs/core";
 import Swal from 'sweetalert2'
 
-const NotificationDropdown = ({id}) => {
+const NotificationDropdown = ({id, users, setUsers}) => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -17,13 +17,13 @@ const NotificationDropdown = ({id}) => {
     setDropdownPopoverShow(false);
   };
 
-  console.log(id)
   const eliminar = async (id) => {
     const res= await fetch("http://localhost:8080/api/v1/users/" + id, {
       method: "DELETE"
     })
     if (res.ok === true) {
       Swal.fire("Exito","usuario eliminado exitosamente","success")
+      setUsers(users.filter(user => user.id !== id))
     }else{
       Swal.fire("Error","No se pudo eliminar, intentelo mas tarde","error")
     }
