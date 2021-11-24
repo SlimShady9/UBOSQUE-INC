@@ -1,6 +1,7 @@
 package co.unbosque.mondsinc.models;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
