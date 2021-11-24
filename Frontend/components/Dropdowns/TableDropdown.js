@@ -73,7 +73,7 @@ const NotificationDropdown = ({id, users, setUsers}) => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Editar
+          Descargar Excel
         </a>
         <a
           href="#pablo"
