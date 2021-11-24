@@ -1,15 +1,54 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 export default function Profile() {
   const router = useRouter()
   const [edit, setEdit] = useState(false)
   const goBack = () => router.back()
-  const datosUsuario = JSON.parse(localStorage.getItem('User'))
+  const datosUsuario = {...JSON.parse(localStorage.getItem('User'))}
+  
   var roles = "administrador"
   if (datosUsuario.rol === 2) {
     roles = "empleado"
   }
+
+  // make a function that updates the user using the api
+  const updateUser = async (e) => {
+    e.preventDefault()
+    const data = {
+      nombre: e.target.nombre.value,
+      correo: e.target.correo.value,
+      documento: e.target.documento.value,
+      tipoDocumento: e.target.tipoDocumento.value,
+    }
+    const response = await fetch(`http://localhost:8080/api/v1/users/${datosUsuario.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    const dataJson = await response.json()
+    if (response.ok) {
+      localStorage.setItem('User', JSON.stringify(dataJson))
+      setEdit(false)
+      Swal.fire({
+        title: 'Actualizado',
+        text: 'Se actualizó correctamente',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      })
+    } else {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo actualizar',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+    }
+  }
+
 
   return (
     <>
@@ -38,8 +77,8 @@ export default function Profile() {
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
               <div className="px-6">
                 <div className="flex flex-wrap justify-center">
-                  <div className="w-full lg:w-3/12 px-4 flex justify-center">
-                    <div className="relative">
+                  <div className="w-full lg:w-3/12 px-4 justify-center flex">
+                    <div className="relative hidden lg:block">
                       <img
                         alt="..."
                         src="/img/team-2-800x800.jpg"
@@ -48,7 +87,7 @@ export default function Profile() {
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:text-right lg:self-center">
-                    <div className="flex justify-between mt-20 sm:mt-0 flex-col sm:flex-row py-6 px-3">
+                    <div className="flex justify-between flex-col sm:flex-row py-6 px-3">
                       <button
                         onClick={goBack}
                         className="bg-blueGray-700 active:bg-blueGray-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
@@ -66,13 +105,16 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
-                <form className="text-center sm:mt-12">
+                <form className="text-center sm:mt-12" onSubmit={updateUser}>
                   {!edit ? (
                     <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
                     {datosUsuario.nombre}
                     </h3>):
                     (
-                    <input type="text" className="text-xl w- font-semibold leading-normal text-blueGray-700 mb-2" value={datosUsuario.nombre}></input>
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-bold mb-2 self-start">Nombre</label>
+                      <input name="nombre" type="text" className="text-xl w-3/5 font-semibold leading-normal text-blueGray-700 focus:bg-gray-400 mb-2" defaultValue={datosUsuario.nombre}></input>
+                    </div>
                     )}
                   
                   {edit ? ( <p>{}</p>):
@@ -91,14 +133,29 @@ export default function Profile() {
                       (
                       <div className="flex flex-col">
                         <label className="block text-sm font-bold mb-2 self-start">Correo</label>
-                        <input type="text" className="text-xl w-3/5 font-semibold leading-normal text-blueGray-700 mb-2" value={datosUsuario.correo}></input>
+                        <input name="correo" type="text" className="text-xl w-3/5 font-semibold leading-normal text-blueGray-700 mb-2" defaultValue={datosUsuario.correo}></input>
                       </div>)}
                     
                   </div>
-                  <div className="mb-8 text-blueGray-600">
-                    <i className="far fa-id-card mr-2 text-lg text-blueGray-400"></i>
-                    {datosUsuario.tipoDocumento} {datosUsuario.documento}
-                  </div>
+                  {!edit ? (
+                    <div className="mb-8 text-blueGray-600">
+                      <i className="far fa-id-card mr-2 text-lg text-blueGray-400"></i>
+                      {datosUsuario.tipoDocumento} {datosUsuario.documento}
+                    </div>):
+                    (
+                    <div className="flex gap-12 md:flex-row flex-col">
+                      <div className="flex flex-col">
+                        <label className="block text-sm font-bold mb-2 self-start">Documento</label>
+                        <select name="tipoDocumento" className="text-xl w-3/5 font-semibold leading-normal text-blueGray-700 mb-2" selected={datosUsuario.tipoDocumento}>
+                          <option value="CC">CC</option>
+                          <option value="NIT">NIT</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col w-full">
+                        <label className="block text-sm font-bold mb-2 self-start">Tipo documento</label>
+                        <input type="text" name="documento" className="text-xl w-3/5 font-semibold leading-normal text-blueGray-700 mb-2" defaultValue={datosUsuario.documento}></input>
+                      </div>
+                    </div>)}
                   {edit ? (
                     <button type="submit"
                     className="bg-blueGray-700 active:bg-blueGray-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-4 ease-linear transition-all duration-150"

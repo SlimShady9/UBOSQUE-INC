@@ -59,12 +59,11 @@ public class UserController {
         @RequestBody User userDetails) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
         .orElseThrow(() -> new ResourceNotFoundException(String.format("El usuario con id %s no fue encontrado", userId)));
-        
         user.setDocumento(userDetails.getDocumento());
         user.setCorreo(userDetails.getCorreo());
         user.setNombre(userDetails.getNombre());
         user.setTipoDocumento(userDetails.getTipoDocumento());
-        if (user.getClave() != userDetails.getClave()) {
+        if (user.getClave().equals(userDetails.getClave())) {
             Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
             String hash = argon2.hash(1, 1024, 1, userDetails.getClave().toCharArray());
             user.setClave(hash);
