@@ -24,7 +24,7 @@ export default function DocumentTable({ color }) {
                   (color === "light" ? "text-blueGray-700" : "text-white")
                 }
               >
-                Card Tables
+                Documentos
               </h3>
               <Link href="/user/upload">
                 <button
