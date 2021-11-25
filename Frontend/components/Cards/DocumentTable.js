@@ -69,7 +69,7 @@ export default function DocumentTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  ORDEN
+                  NÚMERO DE ORDEN
                 </th>
                 <th
                   className={
