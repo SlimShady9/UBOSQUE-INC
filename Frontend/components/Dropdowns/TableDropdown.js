@@ -1,7 +1,8 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
+import Swal from 'sweetalert2'
 
-const NotificationDropdown = () => {
+const NotificationDropdown = ({id, users, setUsers}) => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -15,6 +16,36 @@ const NotificationDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+
+  const eliminar = async (id) => {
+    const res= await fetch("http://localhost:8080/api/v1/users/" + id, {
+      method: "DELETE"
+    })
+    if (res.ok === true) {
+      Swal.fire("Exito","usuario eliminado exitosamente","success")
+      setUsers(users.filter(user => user.id !== id))
+    }else{
+      Swal.fire("Error","No se pudo eliminar, intentelo mas tarde","error")
+    }
+  }
+
+  const eli = (id) => {
+    Swal.fire({
+      title: 'Esta seguro?',
+      text: "¿Quiere eliminar este usuario?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eliminar(id)
+      }
+    })
+  }
+
+
   return (
     <>
       <a
@@ -42,25 +73,16 @@ const NotificationDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Action
+          Ver más detalles
         </a>
         <a
           href="#pablo"
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={() => eli(id)}
         >
-          Another action
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Something else here
+          Eliminar
         </a>
       </div>
     </>
