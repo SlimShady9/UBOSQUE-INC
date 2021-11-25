@@ -1,12 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Link from "next/dist/client/link";
 
 // components
 
-import TableDropdownDocument from "components/Dropdowns/TableDropdownDocument.js";
-
-export default function DocumentTable({ color }) {
+export default function OrderTable({ color }) {
   return (
     <>
       <div
@@ -24,15 +21,8 @@ export default function DocumentTable({ color }) {
                   (color === "light" ? "text-blueGray-700" : "text-white")
                 }
               >
-                Documentos
+                Información del documento
               </h3>
-              <Link href="/user/upload">
-                <button
-                className="bg-blueGray-700 text-white active:bg-blueGray-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
-                >
-                  Sube un nuevo documento
-                </button>
-              </Link>
             </div>
           </div>
         </div>
@@ -105,9 +95,6 @@ export default function DocumentTable({ color }) {
                   <i className="fas fa-circle text-emerald-500 mr-2"></i>{" "}
                   completed
                 </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdownDocument />
-                </td>
               </tr>
             </tbody>
           </table>
@@ -117,10 +104,10 @@ export default function DocumentTable({ color }) {
   );
 }
 
-DocumentTable.defaultProps = {
+OrderTable.defaultProps = {
   color: "light",
 };
 
-DocumentTable.propTypes = {
+OrderTable.propTypes = {
   color: PropTypes.oneOf(["light", "dark"]),
 };

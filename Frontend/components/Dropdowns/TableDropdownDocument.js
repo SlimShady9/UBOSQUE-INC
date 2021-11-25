@@ -1,8 +1,9 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
 import Swal from 'sweetalert2'
+import Link from "next/link";
 
-const NotificationDropdown = ({id, users, setUsers}) => {
+const TableDropdownDocument = ({ id }) => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -18,14 +19,14 @@ const NotificationDropdown = ({id, users, setUsers}) => {
   };
 
   const eliminar = async (id) => {
-    const res= await fetch("http://localhost:8080/api/v1/users/" + id, {
+    const res = await fetch("http://localhost:8080/api/v1/users/" + id, {
       method: "DELETE"
     })
     if (res.ok === true) {
-      Swal.fire("Exito","usuario eliminado exitosamente","success")
+      Swal.fire("Exito", "usuario eliminado exitosamente", "success")
       setUsers(users.filter(user => user.id !== id))
-    }else{
-      Swal.fire("Error","No se pudo eliminar, intentelo mas tarde","error")
+    } else {
+      Swal.fire("Error", "No se pudo eliminar, intentelo mas tarde", "error")
     }
   }
 
@@ -66,15 +67,15 @@ const NotificationDropdown = ({id, users, setUsers}) => {
           "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
         }
       >
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
+        <Link
+          href={"/document/" + id}
         >
-          Ver más detalles
-        </a>
+          <a
+            className={
+              "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+            }
+          > Ver más detalles</a>
+        </Link>
         <a
           href="#pablo"
           className={
@@ -89,4 +90,4 @@ const NotificationDropdown = ({id, users, setUsers}) => {
   );
 };
 
-export default NotificationDropdown;
+export default TableDropdownDocument;
