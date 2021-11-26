@@ -1,6 +1,8 @@
 package co.unbosque.mondsinc.models;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +18,7 @@ public class Documment {
    
     @DBRef(lazy = true)
     private List<Order> order;
+
 
 
     public Documment(String reference, String application, List<Order> order) {
@@ -55,6 +58,9 @@ public class Documment {
     public void setOrder(List<Order> order) {
         this.order = order;
     }
+
+
+
 
     @Override
     public String toString() {

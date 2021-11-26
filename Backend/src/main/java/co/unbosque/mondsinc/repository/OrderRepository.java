@@ -1,6 +1,5 @@
 package co.unbosque.mondsinc.repository;
 
-import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
