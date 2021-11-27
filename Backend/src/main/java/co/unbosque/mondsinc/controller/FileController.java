@@ -2,9 +2,14 @@ package co.unbosque.mondsinc.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import co.unbosque.mondsinc.models.Concept;
+import co.unbosque.mondsinc.models.Documment;
+import co.unbosque.mondsinc.models.Order;
+import co.unbosque.mondsinc.models.User;
+import co.unbosque.mondsinc.repository.ConceptRepository;
+import co.unbosque.mondsinc.repository.DocummentRepository;
+import co.unbosque.mondsinc.repository.OrderRepository;
+import co.unbosque.mondsinc.repository.UserRepository;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -24,16 +38,23 @@ import org.apache.poi.xssf.usermodel.*;
 @RequestMapping("/api/v1/file")
 public class FileController {
 
+    @Autowired
+    private ConceptRepository conceptRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private DocummentRepository docummentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    
     @RequestMapping(value = "/upload/" , method = RequestMethod.POST,
     consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Map<String, String>>
-    uploadDocument(@RequestPart String solicitud, @RequestParam String referencia, 
-    @RequestParam MultipartFile documento) {
+    uploadDocument(@RequestPart String userId, @RequestParam MultipartFile documento) {
         
         HashMap<String, String> daticos = new HashMap<>();
         try {
-            System.out.println(solicitud + referencia);
-            procesarExcel(documento.getInputStream());
+            procesarExcel(documento.getInputStream(), userId);
             daticos.put("Exitos", "Zhi");
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,7 +64,7 @@ public class FileController {
         return ResponseEntity.ok().body(daticos);
     }
 
-    public void procesarExcel(InputStream documento)
+    public void procesarExcel(InputStream documento, String userId)
     throws IOException{
         
         XSSFWorkbook excel = new XSSFWorkbook(documento);
@@ -51,8 +72,6 @@ public class FileController {
   
 		int rows=sheet.getLastRowNum();
 		int cols=sheet.getRow(1).getLastCellNum();
-		
-        int nrow = 0; 
 
         double SMMLV = 908526;
         String tipoDoc = "";
@@ -60,17 +79,17 @@ public class FileController {
         String razon = "";
         String referencia = "";
         String solicitud = "";
-		for(int r=0;r<=rows;r++)
+        ArrayList<String> conceptos = new ArrayList<String>();
+        ArrayList<Concept> Concepts = new ArrayList<Concept>(); 
+        ArrayList<Order> orders = new ArrayList<Order>(); 
+		for(int nrow=0;nrow<=rows;nrow++)
 		{
-			XSSFRow row=sheet.getRow(r);
+			XSSFRow row=sheet.getRow(nrow);
             if (row == null) {
                 // No entries in this row
                 // Handle empty
                 continue;
              }
-          
-            nrow++;
-            int column = 0;
 
             int orden = 0;
             String cedula = "";
@@ -80,13 +99,25 @@ public class FileController {
             double pension = 0;
             double salud = 0;
             double arl = 0;
+
+
+			String numOrder = "";
+            String tpDocumment = "";
+            int number = 0;
+            String nomContributor = "";
+            String post  = "";
+            Date data = new Date();
+            double salary = 0;
+            int workedDays = 0;
+            int daysDisabled = 0;
+            int daysLicensed = 0;
+            int totalDays = 0;
+            Date admissionDates = new Date();
 			
-			
-			for(int c=0;c<cols;c++)
+			for(int column=1;column<cols;column++)
 			{
-                column++;
                 String valor = "";
-                XSSFCell cell=row.getCell(c, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                XSSFCell cell=row.getCell(column, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 	
 				switch(cell.getCellType())
 				{
@@ -110,11 +141,33 @@ public class FileController {
                     }
                 } 
 
+                
+                
+                if (nrow == 5) {
+                            conceptos.add(valor);
+                } 
+
+                
                 if (nrow > 5) {
-                    if (column == 3 && cell.getCellType() == CellType.NUMERIC) {
-                        cedula = valor;
+                    switch(column) {
+                        case 1: numOrder = valor; break;
+                        case 2: tpDocumment = valor; break;
+                        //case 3: number = Integer.parseInt(valor); break;
+                        case 4: nomContributor = valor; break;
+                        case 5: post = valor; break;
+                        //case 8: salary = Double.parseDouble(valor);
+                        //case 9: workedDays = Integer.parseInt(valor); break;
+                        //case 10: daysDisabled = Integer.parseInt(valor); break;
+                        //case 11: daysLicensed = Integer.parseInt(valor); break;
+                        //case 12: totalDays = Integer.parseInt(valor); break;
                     }
                     if (column > 13 && column < 25 && cell.getCellType() == CellType.NUMERIC && valor != "") {
+                        String titulo = "";
+                        titulo = conceptos.get(column);
+                        Double valor1 = Double.parseDouble(valor);
+                        Concept concept = new Concept(titulo, valor1);
+                        Concepts.add(concept);
+                        conceptRepository.save(concept);
                         total = total + Integer.parseInt(valor);
                     }
                     if (column == 13 && column == 18 && column == 22 && column < 25 && cell.getCellType() == CellType.NUMERIC && valor != "") {
@@ -141,9 +194,21 @@ public class FileController {
             if(isBetween(FSP,19,20)) {FSP= (total*1.8)/100;}
             if(FSP > 20) {FSP= (FSP*2)/100;}
             if (nrow > 5) {System.out.println("Cedula:"+cedula+", total ingresos:"+total+", FSP:"+FSP+", IBC:"+IBC+", pension:"+pension+", salud:"+salud+", arl:"+arl);}
-		}
-
-        System.out.println("Tipo de documento:"+tipoDoc+", Numero Documento:"+numDoc+", Razon social:"+razon+", Referencia:"+referencia+", Solicitud:"+solicitud );
+            Order order = new Order(Concepts, numOrder, tpDocumment, number, nomContributor, post, data, salary, workedDays, daysDisabled, daysLicensed, totalDays, admissionDates);
+            orders.add(order);
+            orderRepository.save(order);
+        }
+        Documment document = new Documment(referencia, solicitud, orders);
+        
+        User user = userRepository.findById(userId).get();
+        if (user != null) {
+            if (user.getDocumments() == null) user.setDocumments(new ArrayList<>());
+            user.getDocumments().add(docummentRepository.save(document));
+            userRepository.save(user);
+        }
+        
+        excel.close();
+        //System.out.println("Tipo de documento:"+tipoDoc+", Numero Documento:"+numDoc+", Razon social:"+razon+", Referencia:"+referencia+", Solicitud:"+solicitud );
     }
 
 
