@@ -22,7 +22,7 @@ public class User {
     private String clave;
     private short rol;
 
-    @DBRef(lazy = true)
+    @DBRef
     private List<Documment> documments;
 
 
