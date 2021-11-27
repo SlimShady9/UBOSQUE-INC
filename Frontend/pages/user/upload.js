@@ -11,8 +11,7 @@ export default function Upload() {
     const nDocumento = event.target.archivo.value.split('.')
     if (nDocumento[nDocumento.length-1] === 'xls' || nDocumento[nDocumento.length-1] === 'xlsx') {
       const datos = new FormData();
-      datos.append("solicitud", "zhi")
-      datos.append("referencia", "ño")
+      datos.append("userId", JSON.parse(localStorage.getItem("User")).id);
       datos.append("documento", event.target.archivo.files[0])
       const res = await fetch("http://localhost:8080/api/v1/file/upload/", {
         method: 'POST',

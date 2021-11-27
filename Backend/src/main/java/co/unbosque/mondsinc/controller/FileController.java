@@ -23,17 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import co.unbosque.mondsinc.models.Concept;
 import co.unbosque.mondsinc.models.Documment;
 import co.unbosque.mondsinc.models.Order;
+import co.unbosque.mondsinc.models.User;
 import co.unbosque.mondsinc.repository.ConceptRepository;
 import co.unbosque.mondsinc.repository.DocummentRepository;
 import co.unbosque.mondsinc.repository.OrderRepository;
-
-import java.util.Iterator;
-
-
-import java.io.File;
-import java.io.FileInputStream;
-
-import org.apache.poi.ss.usermodel.Cell;
+import co.unbosque.mondsinc.repository.UserRepository;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -50,17 +44,17 @@ public class FileController {
     private OrderRepository orderRepository;
     @Autowired
     private DocummentRepository docummentRepository;
-
+    @Autowired
+    private UserRepository userRepository;
+    
     @RequestMapping(value = "/upload/" , method = RequestMethod.POST,
     consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Map<String, String>>
-    uploadDocument(@RequestPart String solicitud, @RequestParam String referencia, 
-    @RequestParam MultipartFile documento) {
+    uploadDocument(@RequestPart String userId, @RequestParam MultipartFile documento) {
         
         HashMap<String, String> daticos = new HashMap<>();
         try {
-            System.out.println(solicitud + referencia);
-            procesarExcel(documento.getInputStream());
+            procesarExcel(documento.getInputStream(), userId);
             daticos.put("Exitos", "Zhi");
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,7 +64,7 @@ public class FileController {
         return ResponseEntity.ok().body(daticos);
     }
 
-    public void procesarExcel(InputStream documento)
+    public void procesarExcel(InputStream documento, String userId)
     throws IOException{
         
         XSSFWorkbook excel = new XSSFWorkbook(documento);
@@ -205,8 +199,16 @@ public class FileController {
             orderRepository.save(order);
         }
         Documment document = new Documment(referencia, solicitud, orders);
-        docummentRepository.save(document);
-        System.out.println("Tipo de documento:"+tipoDoc+", Numero Documento:"+numDoc+", Razon social:"+razon+", Referencia:"+referencia+", Solicitud:"+solicitud );
+        
+        User user = userRepository.findById(userId).get();
+        if (user != null) {
+            if (user.getDocumments() == null) user.setDocumments(new ArrayList<>());
+            user.getDocumments().add(docummentRepository.save(document));
+            userRepository.save(user);
+        }
+        
+        excel.close();
+        //System.out.println("Tipo de documento:"+tipoDoc+", Numero Documento:"+numDoc+", Razon social:"+razon+", Referencia:"+referencia+", Solicitud:"+solicitud );
     }
 
 
