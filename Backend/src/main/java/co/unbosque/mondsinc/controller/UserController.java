@@ -1,5 +1,7 @@
 package co.unbosque.mondsinc.controller;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,11 @@ public class UserController {
 
     @GetMapping("users")
     public List<User> retireveUserList() {
-        return userRepository.findAll();
+        List<User> usuarios = userRepository.findAll();
+        for (int i = 0; i < usuarios.size(); i++) {
+            usuarios.get(i).setDocumments(null);
+        }
+        return usuarios;
     }
 
     @GetMapping("users/{id}")
@@ -43,6 +49,7 @@ public class UserController {
     throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
         .orElseThrow(() -> new ResourceNotFoundException(String.format("El usuario con id %s no fue encontrado", userId)));
+        user.setDocumments(null);
         return ResponseEntity.ok().body(user);
     }
 
