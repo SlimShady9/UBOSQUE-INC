@@ -23,15 +23,50 @@ export default function UsersTable({ color }) {
     }
   };
 
+  const handleInputChange = (event, i) => {
+    setSelectedUsers(selectedUsers.map(user => (user.id === i.id ? { ...user, [event.target.name]: event.target.value } : user)));
+  }
 
-  useEffect(() => {
+  const editUser = (i) => {
+    i.rol = parseInt(i.rol);
+    console.log(i);
+    fetch("http://localhost:8080/api/v1/users/" + i.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+        },
+      body: JSON.stringify(i)
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        data.edit = false;
+        console.log(data);
+        setUsers(users.map(user => user.id === i.id ? {...data } : user));
+        setSelectedUsers(users.slice(selectedUsers.length - pagination, selectedUsers.length));
+      });
+  }
+
+
+
+  const cancelEdit = () => {
+    setSelectedUsers(users.slice(selectedUsers.length - pagination, selectedUsers.length));
+  };
+
+  const retireveUsers = () => {
     fetch("http://localhost:8080/api/v1/users")
       .then((res) => res.json())
       .then((data) => {
         const data2 = data.filter((user) => user.id !== JSON.parse(localStorage.getItem("User")).id);
+        data2.forEach(element => {
+          element.edit = false;
+        });
         setUsers(data2);
         setSelectedUsers(data2.slice(0, pagination));
       });
+    };
+
+  useEffect( () => {
+    retireveUsers();
   }, []);
 
   return (
@@ -122,8 +157,11 @@ export default function UsersTable({ color }) {
               </tr>
             </thead>
             <tbody>
-              {selectedUsers.map((i) => (
-                <tr>
+              {selectedUsers.map(i => {
+                if (!i.edit) {
+
+                return (
+                <tr key={i.id}>
                   <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs text-left whitespace-nowrap p-4">
                     <h4
                       className={
@@ -149,10 +187,54 @@ export default function UsersTable({ color }) {
                     {i.correo}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                    <TableDropdown id = {i.id} users={users} setUsers={setUsers} />
+                    <TableDropdown id = {i.id} users={selectedUsers} setUsers={setSelectedUsers} />
                   </td>
                 </tr>
-              ))}
+                )} else {
+                  return (
+                    
+                    <tr key={i.id}>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 focus:border focus:border-blue-500 transition-colors duration-200">
+                        <input value={i.nombre} name="nombre" onChange={e => handleInputChange(e, i)}
+                        className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap py-3 text-black" />
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <select value={i.tipoDocumento} name="tipoDocumento" onChange={e => handleInputChange(e, i)}
+                        className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap py-3 text-black">
+                          <option value="CC">CC</option>
+                          <option value="NIT">NIT</option>
+                        </select>
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <input value={i.documento} name="documento" onChange={e => handleInputChange(e, i)}
+                        className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap py-3 text-black" />
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <select value={i.rol} name="rol"onChange={e => handleInputChange(e, i)} 
+                        className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap py-3 text-black">
+                          <option value={2}>Usuario</option>
+                          <option value={1}>Administrador</option>
+                        </select>
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <input value={i.correo} name="correo" onChange={e => handleInputChange(e, i)}
+                        className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap py-3 text-black" />
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                        <div className="flex align-middle">
+                        <button className="fas fa-check text-lg mx-4 px-3 text-blueGray-500"
+                        onClick={() => editUser(i)}>
+                        </button>
+                        <button className="fas fa-times mx-4 px-3 text-lg text-blueGray-500"
+                        onClick={() => cancelEdit()}>
+                        </button>
+
+                        </div>
+                      </td>
+                    </tr>
+                   )
+                }
+              })}
             </tbody>
           </table>
           
