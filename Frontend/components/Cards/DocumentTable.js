@@ -1,12 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Link from "next/dist/client/link";
-
+import Swal from "sweetalert2";
+import { useState, useEffect } from "react"
 // components
 
 import TableDropdownDocument from "components/Dropdowns/TableDropdownDocument.js";
 
 export default function DocumentTable({ color }) {
+
+  const [datos, setdatos] = useState([])
+
+  useEffect(() => {
+    fetch ("http://localhost:8080/api/v1/documents/"+JSON.parse(localStorage.getItem("User")).id)
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      } throw response 
+    })
+    .then(data => {
+      console.log(data)
+      setdatos(data)
+      }) 
+    .catch(() => Swal.fire("Error","Error en el servidor, intentelo más tarde", "error"))
+  }, [])
+
+
   return (
     <>
       <div
@@ -59,16 +78,6 @@ export default function DocumentTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  SOLICITUD
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
                   NÚMERO DE ORDENES
                 </th>
                 <th
@@ -82,33 +91,26 @@ export default function DocumentTable({ color }) {
               </tr>
             </thead>
             <tbody>
-              <tr>
+              {datos.map(i =>
+              (<tr key={i.id}>
                 <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                  <img
-                    src="/img/vue.jpg"
-                    className="h-12 w-12 bg-white rounded-full border"
-                    alt="..."
-                  ></img>{" "}
                   <span
                     className={
                       "ml-3 font-bold " +
                       +(color === "light" ? "text-blueGray-600" : "text-white")
                     }
-                  >
-                    React Material Dashboard
+                    >
+                    {i.reference}
                   </span>
-                </th>
+                </th> 
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  $2,200 USD
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  <i className="fas fa-circle text-emerald-500 mr-2"></i>{" "}
-                  completed
+                  {i.order.length}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                   <TableDropdownDocument />
                 </td>
-              </tr>
+              </tr>)
+              )}
             </tbody>
           </table>
         </div>
