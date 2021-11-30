@@ -7,7 +7,7 @@ import { useState, useEffect } from "react"
 
 import TableDropdownDocument from "components/Dropdowns/TableDropdownDocument.js";
 
-export default function DocumentTable({ color }) {
+export default function DocumentTable({ color }, orden) {
 
   const [datos, setdatos] = useState([])
 
@@ -107,7 +107,7 @@ export default function DocumentTable({ color }) {
                   {i.order.length}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdownDocument />
+                  <TableDropdownDocument/>
                 </td>
               </tr>)
               )}
