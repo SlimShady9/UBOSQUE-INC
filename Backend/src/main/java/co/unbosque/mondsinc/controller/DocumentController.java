@@ -1,5 +1,6 @@
 package co.unbosque.mondsinc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,11 @@ public class DocumentController {
     
     @RequestMapping("documents")
     public ResponseEntity<List<Documment>> getDocuments() {
-        return ResponseEntity.ok().body(docummentRepository.findAll());
+        ArrayList<Documment> documents = (ArrayList<Documment>) docummentRepository.findAll();
+        for (Documment i : documents) {
+            i.setOrder(null);
+        }
+        return ResponseEntity.ok().body(documents);
     }
 
     @RequestMapping("documents/{id}")

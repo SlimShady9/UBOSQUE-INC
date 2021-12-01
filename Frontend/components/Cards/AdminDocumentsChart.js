@@ -2,16 +2,37 @@ import React from "react";
 import Chart from "chart.js";
 
 export default function AdminDocumentsChart() {
+
+  //get dates for last 6 months from data
+  const getDates = (data) => {
+    let dates = [0,0,0,0,0,0];
+    data.forEach((item) => {
+      var date = new Date(item.date);
+      var month = date.getMonth();
+      switch (month % 6 ) {
+        case 0: dates[0]++; break;
+        case 1: dates[1]++; break;
+        case 2: dates[2]++; break;
+        case 3: dates[3]++; break;
+        case 4: dates[4]++; break;
+        case 5: dates[5]++; break;
+        default: break;
+      }
+    });
+    return dates;
+  }
+
   React.useEffect(() => {
     var month = new Date().getMonth();
+    var datos = [0,0,0,0,0,0];
 
     //get users from database
     fetch("/api/admin/documents/monthly")
       .then((res) => res.json())
       .then((data) => {
-        
+        datos = getDates(data);
+      })
 
-    
     var config = {
       type: "line",
       data: {
@@ -28,7 +49,7 @@ export default function AdminDocumentsChart() {
             label: new Date().getFullYear(),
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [65, 78, 66, 44, 56, 67, 75],
+            data: datos,
             fill: false,
           },
         ],
