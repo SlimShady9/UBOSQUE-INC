@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 // components
 
-export default function OrderTable({ color }) {
+export default function OrderTable({ color, order }) {
   return (
     <>
       <div
@@ -39,7 +39,7 @@ export default function OrderTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  REFERENCIA
+                  TIPO DE DOCUMENTO
                 </th>
                 <th
                   className={
@@ -49,7 +49,7 @@ export default function OrderTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  SOLICITUD
+                  DOCUMENTO
                 </th>
                 <th
                   className={
@@ -59,7 +59,7 @@ export default function OrderTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  NÚMERO DE ORDENES
+                  NOMBRE CONTRIBUYENTE
                 </th>
                 <th
                   className={
@@ -68,7 +68,19 @@ export default function OrderTable({ color }) {
                       ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
-                ></th>
+                >
+                  AÑO
+                </th>
+                <th
+                  className={
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    (color === "light"
+                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                  }
+                >
+                  MES
+                </th>
               </tr>
             </thead>
             <tbody>

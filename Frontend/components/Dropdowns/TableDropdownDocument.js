@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createPopper } from "@popperjs/core";
 import Swal from 'sweetalert2'
 import Link from "next/link";
 
-const TableDropdownDocument = ({ id }) => {
+const TableDropdownDocument = ({id}) => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
@@ -18,17 +18,18 @@ const TableDropdownDocument = ({ id }) => {
     setDropdownPopoverShow(false);
   };
 
-  const eliminar = async (id) => {
+  const eliminar = async () => {
     const res = await fetch("http://localhost:8080/api/v1/users/" + id, {
       method: "DELETE"
     })
     if (res.ok === true) {
       Swal.fire("Exito", "usuario eliminado exitosamente", "success")
-      setUsers(users.filter(user => user.id !== id))
+      //setUsers(users.filter(user => user.id !== id))
     } else {
       Swal.fire("Error", "No se pudo eliminar, intentelo mas tarde", "error")
     }
   }
+
 
   const eli = (id) => {
     Swal.fire({
@@ -41,7 +42,7 @@ const TableDropdownDocument = ({ id }) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        eliminar(id)
+        //eliminar(id)
       }
     })
   }
@@ -68,20 +69,21 @@ const TableDropdownDocument = ({ id }) => {
         }
       >
         <Link
-          href={"/document/" + id}
+          href={"/user/document/" + id}
         >
-          <a
+          <button
             className={
               "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
             }
-          > Ver más detalles</a>
+          > Ver más detalles</button>
         </Link>
         <a
           href="#pablo"
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={() => eli(id)}
+          
+          onClick={() => eli()}
         >
           Eliminar
         </a>

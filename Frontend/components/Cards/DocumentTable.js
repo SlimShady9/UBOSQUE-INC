@@ -107,7 +107,7 @@ export default function DocumentTable({ color }, orden) {
                   {i.order.length}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdownDocument/>
+                  <TableDropdownDocument id={i.id}/>
                 </td>
               </tr>)
               )}
