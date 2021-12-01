@@ -1,5 +1,6 @@
 package co.unbosque.mondsinc.models;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -21,6 +22,7 @@ public class User {
     private String nombre;
     private String clave;
     private short rol;
+    private Date fechaCreacion;
 
     @DBRef
     private List<Documment> documments;
@@ -99,6 +101,14 @@ public class User {
 
     public void setRol(short rol) {
         this.rol = rol;
+    }
+
+    public Date getFechaCreacion() {
+        return this.fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     @Override

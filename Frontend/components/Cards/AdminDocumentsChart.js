@@ -1,19 +1,27 @@
 import React from "react";
 import Chart from "chart.js";
 
-export default function CardLineChart() {
+export default function AdminDocumentsChart() {
   React.useEffect(() => {
+    var month = new Date().getMonth();
+
+    //get users from database
+    fetch("/api/admin/documents/monthly")
+      .then((res) => res.json())
+      .then((data) => {
+        
+
+    
     var config = {
       type: "line",
       data: {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
+          month<6? "Enero" : "Julio",
+          month<6? "Febrero": "Agosto",
+          month<6? "Marzo"  : "Septiembre",
+          month<6? "April": "Octubre",
+          month<6? "Mayo" : "Noviembre",
+          month<6? "Junio" : "Diciembre",
         ],
         datasets: [
           {

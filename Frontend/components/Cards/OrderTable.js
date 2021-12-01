@@ -1,9 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
+import { useRouter } from 'next/router'
 
 // components
 
-export default function OrderTable({ color, order }) {
+export default function OrderTable({ color }) {
+
+  const router = useRouter();
+  const [orders, setOrders] = useState([]);
+  const { id } = router.query;
+  let pagination = 10;
+  const [selectedOrders, setSelectedOrders] = useState([]);
+
+  const nextPagination = () => {
+    if (selectedOrders.length < orders.length) {
+      setSelectedOrders(orders.slice(selectedOrders.length, selectedOrders.length + pagination));
+      pagination += pagination;
+    }
+  };
+
+  const prevPagination = () => {
+    if (selectedOrders.length > 0) {
+      setSelectedOrders(orders.slice(selectedOrders.length - pagination, selectedOrders.length));
+      pagination -= pagination;
+    }
+  };
+  // Llamada al api de la orden
+  const getOrder = async () => {
+
+    const response = await fetch(`http://localhost:8080/api/v1/documents/${id}`);
+    const data = await response.json();
+    setOrders(data.order);
+    setSelectedOrders(orders.slice(0, pagination));
+  };
+
+  useEffect(async () => {
+    await getOrder();
+  }, []);
+
   return (
     <>
       <div
@@ -31,16 +65,7 @@ export default function OrderTable({ color, order }) {
           <table className="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  TIPO DE DOCUMENTO
-                </th>
+                
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
@@ -81,35 +106,69 @@ export default function OrderTable({ color, order }) {
                 >
                   MES
                 </th>
+                <th
+                  className={
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    (color === "light"
+                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                  }
+                >
+                  FECHA DE PAGO
+                </th>
+                <th
+                  className={
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    (color === "light"
+                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                  }
+                >
+                  COTIZACION PAGADA
+                </th>
+                <th
+                  className={
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    (color === "light"
+                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                  }
+                >
+                  ESTADO
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                  <img
-                    src="/img/vue.jpg"
-                    className="h-12 w-12 bg-white rounded-full border"
-                    alt="..."
-                  ></img>{" "}
-                  <span
-                    className={
-                      "ml-3 font-bold " +
-                      +(color === "light" ? "text-blueGray-600" : "text-white")
-                    }
-                  >
-                    React Material Dashboard
-                  </span>
-                </th>
+              {selectedOrders.map((order) => (
+              <tr key={order.id}>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  $2,200 USD
+                  {order.tpDocumment}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  <i className="fas fa-circle text-emerald-500 mr-2"></i>{" "}
-                  completed
+                  {order.nomContributor}
                 </td>
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                  {order.post}
+                </td>   
               </tr>
+              ))}
             </tbody>
           </table>
+        </div>
+        <div className={"static w-full px-4 py-3 flex items-center justify-between border-t sm:px-6" + 
+        (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")}>
+            <div className="flex-1 flex justify-between sm:hidden">
+              <button onClick={() => prevPagination()}
+              className={"relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md"+
+              (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")}>
+                Anterior
+              </button>
+              <button onClick={() => nextPagination()}
+              className={"relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md"+
+              (color === "light" ? "bg-white" : "bg-blueGray-700 text-white")}>
+                Siguiente
+              </button>
+            </div>
         </div>
       </div>
     </>

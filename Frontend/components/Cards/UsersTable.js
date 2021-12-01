@@ -23,7 +23,6 @@ export default function UsersTable({ color }) {
     }
   };
 
-
   useEffect(() => {
     fetch("http://localhost:8080/api/v1/users")
       .then((res) => res.json())
@@ -123,7 +122,7 @@ export default function UsersTable({ color }) {
             </thead>
             <tbody>
               {selectedUsers.map((i) => (
-                <tr>
+                <tr key={i.id}>
                   <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs text-left whitespace-nowrap p-4">
                     <h4
                       className={
@@ -171,7 +170,7 @@ export default function UsersTable({ color }) {
                 Siguiente
               </button>
             </div>
-          </div>
+        </div>
       </div>
     </>
   );

@@ -13,14 +13,14 @@ export default function User({ children }) {
   })
 
   return (
-    <>
+    <div>
       <Sidebar />
-      <div className="relative md:ml-64 bg-blueGray-100 h-screen">
+      <div className="relative md:ml-64 ">
 
         <div className="py-8 px-4 md:px-10 mx-auto w-full">
           {children}
         </div>
       </div>
-    </>
+    </div>
   );
 }

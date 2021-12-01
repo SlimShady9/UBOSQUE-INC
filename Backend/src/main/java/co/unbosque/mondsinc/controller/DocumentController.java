@@ -31,13 +31,20 @@ public class DocumentController {
     }
 
     @RequestMapping("documents/{id}")
-    public ResponseEntity<List<Documment>> getDocument(@PathVariable(value = "id") String id)
+    public ResponseEntity<Documment> getDocument(@PathVariable(value = "id") String id)
+    throws ResourceNotFoundException {
+        Documment documment = docummentRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(String.format("El documento con id %s no fue encontrado", id)));
+        return ResponseEntity.ok().body(documment);
+    }
+    
+    @RequestMapping("userdocuments/{id}")
+    public ResponseEntity<List<Documment>> getDocumentById(@PathVariable(value = "id") String id)
     throws ResourceNotFoundException {
         User user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(String.format("El usuario con id %s no fue encontrado", id)));
 
         return ResponseEntity.ok().body(user.getDocumments());
     }
-    
 
 }

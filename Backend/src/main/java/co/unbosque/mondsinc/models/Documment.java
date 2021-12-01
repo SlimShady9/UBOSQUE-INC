@@ -1,5 +1,6 @@
 package co.unbosque.mondsinc.models;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +20,14 @@ public class Documment {
     @DBRef(lazy = true)
     private List<Order> order;
 
+    private Date date;
 
 
-    public Documment(String reference, String application, List<Order> order) {
+    public Documment(String reference, String application, List<Order> order, Date date) {
         this.reference = reference;
         this.application = application;
         this.order = order;
+        this.date = date;
     }
 
     public String getId() {
@@ -59,7 +62,13 @@ public class Documment {
         this.order = order;
     }
 
+    public Date getDate() {
+        return this.date;
+    }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
 
     @Override
