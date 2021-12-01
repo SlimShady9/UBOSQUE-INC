@@ -73,7 +73,7 @@ const NotificationDropdown = ({id, users, setUsers}) => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Ver más detalles
+          Editar
         </a>
         <a
           href="#pablo"
