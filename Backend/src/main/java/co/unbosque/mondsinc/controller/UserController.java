@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +71,7 @@ public class UserController {
         user.setCorreo(userDetails.getCorreo());
         user.setNombre(userDetails.getNombre());
         user.setTipoDocumento(userDetails.getTipoDocumento());
+        user.setRol(userDetails.getRol());
         if (user.getClave().equals(userDetails.getClave())) {
             Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
             String hash = argon2.hash(1, 1024, 1, userDetails.getClave().toCharArray());

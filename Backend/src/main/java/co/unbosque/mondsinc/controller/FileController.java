@@ -52,19 +52,15 @@ public class FileController {
     ArrayList<Concept> Concepts = new ArrayList<Concept>(); 
     @RequestMapping(value = "/upload/" , method = RequestMethod.POST,
     consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Map<String, String>>
+    public ResponseEntity<Boolean>
     uploadDocument(@RequestPart String userId, @RequestParam MultipartFile documento) {
-        
-        HashMap<String, String> daticos = new HashMap<>();
         try {
             procesarExcel(documento.getInputStream(), userId);
-            daticos.put("Exitos", "Zhi");
         } catch (IOException e) {
             e.printStackTrace();
-            daticos.put("Mal", ":c");
-            return ResponseEntity.internalServerError().body(daticos);
+            return ResponseEntity.internalServerError().body(false);
         }
-        return ResponseEntity.ok().body(daticos);
+        return ResponseEntity.ok().body(true);
     }
 
     public void procesarExcel(InputStream documento, String userId)
