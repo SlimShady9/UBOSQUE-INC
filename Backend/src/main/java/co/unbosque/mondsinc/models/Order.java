@@ -20,19 +20,26 @@ public class Order {
     private int number;
     private String nomContributor;
     private String post;
-    private Date data;
+    private int month;
+    private int year;
     private double salary;
     private int workedDays;
     private int daysDisabled;
     private int daysLicensed;
     private int totalDays;
     private Date admissionDates;
-    
-    @DBRef
-    private SaveDocument saveDocument;
-
+    private double IBC;
+    private double salud;
+    private double difSalud;
+    private String estadoSalud;
+    private double pension;
+    private double difPension;
+    private String estadoPension;
+    private double arl;
+    private double difArl;
+    private String estadoArl;
     public Order(List<Concept> concepts, String numOrder, String tpDocumment, int number, String nomContributor, String post,
-    Date data, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates) {
+    int month, int year, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates, double IBC, double salud, double difSalud, String estadoSalud, double pension, double difPension, String estadoPension, double arl, double difArl, String estadoArl) {
 
         this.concepts = concepts;
         this.numOrder = numOrder;
@@ -40,7 +47,8 @@ public class Order {
         this.number = number;
         this.nomContributor = nomContributor;
         this.post = post;
-        this.data = data;
+        this.month = month;
+        this.year = year;
         this.salary = salary;
         this.workedDays = workedDays;
         this.daysDisabled = daysDisabled;
@@ -105,12 +113,20 @@ public class Order {
         this.post = post;
     }
 
-    public Date getData() {
-        return this.data;
+    public int getMonth() {
+        return this.month;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setMonth(int month) {
+        this.month = month;
+    }
+    
+    public int getYear() {
+        return this.year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public double getSalary() {
@@ -161,6 +177,61 @@ public class Order {
         this.admissionDates = admissionDates;
     }
 
+    public double getIBC() {
+        return this.IBC;
+    }
+
+    public void setIBC(double IBC) {
+        this.IBC = IBC;
+    }
+    
+    public double getSalud() {
+        return this.salud;
+    }
+
+    public void setSalud(double salud) {
+        this.salud = salud;
+    }
+    
+    public double getDifSalud() {
+        return this.difSalud;
+    }
+
+    public void setDifSalud(double difSalud) {
+        this.difSalud = difSalud;
+    }
+    
+    public String getEstadoSalud() {
+        return this.estadoSalud;
+    }
+
+    public void setEstadoSalud(String estadoSalud) {
+        this.estadoSalud = estadoSalud;
+    }
+    
+    public double getPension() {
+        return this.pension;
+    }
+
+    public void setPension(double pension) {
+        this.pension = pension;
+    }
+    
+    public double getDifPension() {
+        return this.difPension;
+    }
+
+    public void setDifPension(double difPension) {
+        this.difPension = difPension;
+    }
+    
+    public String getEstadoPension() {
+        return this.estadoPension;
+    }
+
+    public void setEstadoPension(String estadoPension) {
+        this.estadoPension = estadoPension;
+    }
     @Override
     public String toString() {
         return "{" +
@@ -171,7 +242,8 @@ public class Order {
             ", number='" + getNumber() + "'" +
             ", nomContributor='" + getNomContributor() + "'" +
             ", post='" + getPost() + "'" +
-            ", data='" + getData() + "'" +
+            ", month='" + getMonth() + "'" +
+            ", year='" + getYear() + "'" +
             ", salary='" + getSalary() + "'" +
             ", workedDays='" + getWorkedDays() + "'" +
             ", daysDisabled='" + getDaysDisabled() + "'" +
