@@ -17,7 +17,7 @@ const NotificationDropdown = ({id, users, setUsers}) => {
     setDropdownPopoverShow(false);
   };
 
-  const eliminar = async (id) => {
+  const eliminar = async () => {
     const res= await fetch("http://localhost:8080/api/v1/users/" + id, {
       method: "DELETE"
     })
@@ -29,7 +29,7 @@ const NotificationDropdown = ({id, users, setUsers}) => {
     }
   }
 
-  const eli = (id) => {
+  const eli = () => {
     Swal.fire({
       title: 'Esta seguro?',
       text: "¿Quiere eliminar este usuario?",
@@ -37,20 +37,25 @@ const NotificationDropdown = ({id, users, setUsers}) => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Confirmar eliminar usuario'
     }).then((result) => {
       if (result.isConfirmed) {
-        eliminar(id)
+        eliminar()
       }
     })
+  }
+
+  const modi = () => {
+    console.log(users);
+    setUsers([...users.map(obj => obj.id === id ? {...obj, edit: true} : obj)])
+    console.log(users);
   }
 
 
   return (
     <>
-      <a
+      <button
         className="text-blueGray-500 py-1 px-3"
-        href="#pablo"
         ref={btnDropdownRef}
         onClick={(e) => {
           e.preventDefault();
@@ -58,7 +63,7 @@ const NotificationDropdown = ({id, users, setUsers}) => {
         }}
       >
         <i className="fas fa-ellipsis-v"></i>
-      </a>
+      </button>
       <div
         ref={popoverDropdownRef}
         className={
@@ -66,24 +71,22 @@ const NotificationDropdown = ({id, users, setUsers}) => {
           "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
         }
       >
-        <a
-          href="#pablo"
+        <button
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={() => modi()}
         >
-          Editar
-        </a>
-        <a
-          href="#pablo"
+          Editar usuario
+        </button>
+        <button
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={() => eli(id)}
+          onClick={() => eli()}
         >
           Eliminar
-        </a>
+        </button>
       </div>
     </>
   );
