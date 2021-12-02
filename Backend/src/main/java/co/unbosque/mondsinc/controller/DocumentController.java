@@ -1,5 +1,6 @@
 package co.unbosque.mondsinc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +28,28 @@ public class DocumentController {
     
     @RequestMapping("documents")
     public ResponseEntity<List<Documment>> getDocuments() {
-        return ResponseEntity.ok().body(docummentRepository.findAll());
+        ArrayList<Documment> documents = (ArrayList<Documment>) docummentRepository.findAll();
+        for (Documment i : documents) {
+            i.setOrder(null);
+        }
+        return ResponseEntity.ok().body(documents);
     }
 
     @RequestMapping("documents/{id}")
-    public ResponseEntity<List<Documment>> getDocument(@PathVariable(value = "id") String id)
+    public ResponseEntity<Documment> getDocument(@PathVariable(value = "id") String id)
+    throws ResourceNotFoundException {
+        Documment documment = docummentRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(String.format("El documento con id %s no fue encontrado", id)));
+        return ResponseEntity.ok().body(documment);
+    }
+    
+    @RequestMapping("userdocuments/{id}")
+    public ResponseEntity<List<Documment>> getDocumentById(@PathVariable(value = "id") String id)
     throws ResourceNotFoundException {
         User user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(String.format("El usuario con id %s no fue encontrado", id)));
 
         return ResponseEntity.ok().body(user.getDocumments());
     }
-    
 
 }

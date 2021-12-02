@@ -1,6 +1,7 @@
 package co.unbosque.mondsinc.controller;
 
 import java.lang.reflect.Array;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,7 @@ public class UserController {
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
         String hash = argon2.hash(1, 1024, 1, user.getClave().toCharArray());
         user.setClave(hash);
+        user.setFechaCreacion(new Date(System.currentTimeMillis()));
         return userRepository.save(user);
     }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 // components
 
-import TableDropdown from "components/Dropdowns/TableDropdown.js";
+import TableDropdown from "components/Dropdowns/TableDropdownUser.js";
 
 export default function UsersTable({ color }) {
   const [users, setUsers] = useState([]);
@@ -253,7 +253,7 @@ export default function UsersTable({ color }) {
                 Siguiente
               </button>
             </div>
-          </div>
+        </div>
       </div>
     </>
   );

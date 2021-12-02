@@ -194,7 +194,7 @@ public class FileController {
             orders.add(order);
             orderRepository.save(order);
         }
-        Documment document = new Documment(referencia, solicitud, orders);
+        Documment document = new Documment(referencia, solicitud, orders, new Date(System.currentTimeMillis()));
         
         User user = userRepository.findById(userId).get();
         if (user != null) {
