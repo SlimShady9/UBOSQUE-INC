@@ -27,8 +27,8 @@ export default function OrderTable({ color }) {
   };
   // Llamada al api de la orden
   const getOrder = async () => {
-
-    const response = await fetch(`http://localhost:8080/api/v1/documents/${id}`);
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/documents/' : 'http://localhost:8080/api/v1/documents/';
+    const response = await fetch(`${URL}${id}`);
     const data = await response.json();
     setOrders(data.order);
     setSelectedOrders(orders.slice(0, pagination));
@@ -114,7 +114,7 @@ export default function OrderTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  FECHA DE PAGO
+                  ESTADO PENSIÓN
                 </th>
                 <th
                   className={
@@ -124,7 +124,7 @@ export default function OrderTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  COTIZACION PAGADA
+                  ESTADO SALUD
                 </th>
                 <th
                   className={
@@ -134,7 +134,7 @@ export default function OrderTable({ color }) {
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  ESTADO
+                  ESTADO ARL
                 </th>
               </tr>
             </thead>
@@ -148,8 +148,20 @@ export default function OrderTable({ color }) {
                   {order.nomContributor}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {order.post}
-                </td>   
+                  {order.year}
+                </td> 
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                  {order.month}
+                </td>  
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                  {order.estadoPension}
+                </td> 
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                  {order.estadoSalud}
+                </td> 
+                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                  {order.estadoArl}
+                </td> 
               </tr>
               ))}
             </tbody>

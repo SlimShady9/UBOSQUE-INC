@@ -7,10 +7,10 @@ import { useState, useEffect } from "react"
 
 import TableDropdownDocument from "components/Dropdowns/TableDropdownDocument.js";
 
-export default function DocumentTable({ color }, orden) {
+export default function DocumentTable({ color }) {
 
   const [datos, setdatos] = useState([])
-
+  
   useEffect(() => {
     const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/userdocuments/' : 'http://localhost:8080/api/v1/userdocuments/';
     fetch (`${URL}${JSON.parse(localStorage.getItem("User")).id}`)
@@ -21,7 +21,9 @@ export default function DocumentTable({ color }, orden) {
     })
     .then(data => {
       console.log(data)
-      setdatos(data)
+      if(data.reference == null){
+        setdatos(data)
+      }
       }) 
     .catch(() => Swal.fire("Error","Error en el servidor, intentelo más tarde", "error"))
   }, [])
