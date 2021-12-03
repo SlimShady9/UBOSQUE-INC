@@ -22,7 +22,8 @@ export default function Profile() {
       documento: e.target.documento.value,
       tipoDocumento: e.target.tipoDocumento.value,
     }
-    const response = await fetch(`http://localhost:8080/api/v1/users/${datosUsuario.id}`, {
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/' : 'http://localhost:8080/api/v1/';
+    const response = await fetch(`${URL}users/${datosUsuario.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

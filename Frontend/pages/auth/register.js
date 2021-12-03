@@ -11,7 +11,8 @@ export default function Register() {
     if (event.target.clave.value !== event.target.confirmar.value) {
       Swal.fire('Error', 'Sus claves no coinciden', 'error')
     } else {
-      const res = await fetch('http://localhost:8080/api/v1/users/', {
+      const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/users/' : 'http://localhost:8080/api/v1/users/';
+      const res = await fetch(URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

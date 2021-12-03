@@ -18,7 +18,8 @@ const NotificationDropdown = ({id, users, setUsers}) => {
   };
 
   const eliminar = async () => {
-    const res= await fetch("http://localhost:8080/api/v1/users/" + id, {
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/users/' : 'http://localhost:8080/api/v1/users/';
+    const res= await fetch(URL + id, {
       method: "DELETE"
     })
     if (res.ok === true) {

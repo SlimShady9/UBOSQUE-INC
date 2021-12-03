@@ -12,7 +12,8 @@ export default function DocumentTable({ color }, orden) {
   const [datos, setdatos] = useState([])
 
   useEffect(() => {
-    fetch ("http://localhost:8080/api/v1/userdocuments/"+JSON.parse(localStorage.getItem("User")).id)
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/userdocuments/' : 'http://localhost:8080/api/v1/userdocuments/';
+    fetch (`${URL}${JSON.parse(localStorage.getItem("User")).id}`)
     .then(response => {
       if (response.ok) {
         return response.json()

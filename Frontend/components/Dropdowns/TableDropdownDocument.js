@@ -19,7 +19,8 @@ const TableDropdownDocument = ({id}) => {
   };
 
   const eliminar = async () => {
-    const res = await fetch("http://localhost:8080/api/v1/documents/" + id, {
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/documents/' : 'http://localhost:8080/api/v1/documents/';
+    const res = await fetch(URL + id, {
       method: "DELETE"
     });
     if (res.ok === true) {

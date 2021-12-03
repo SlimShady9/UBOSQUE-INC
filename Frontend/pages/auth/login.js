@@ -18,7 +18,8 @@ export default function Login() {
       correo: correo,
       clave: clave,
     };
-    const res = await fetch('http://localhost:8080/api/v1/auth/authentication/', {
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/auth/authentication/' : 'http://localhost:8080/api/v1/auth/authentication/';
+    const res = await fetch(URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

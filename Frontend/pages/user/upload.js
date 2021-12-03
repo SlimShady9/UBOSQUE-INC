@@ -13,7 +13,8 @@ export default function Upload() {
       const datos = new FormData();
       datos.append("userId", JSON.parse(localStorage.getItem("User")).id);
       datos.append("documento", event.target.archivo.files[0])
-      const res = await fetch("http://localhost:8080/api/v1/file/upload/", {
+      const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/file/upload/' : 'http://localhost:8080/api/v1/file/upload/';
+      const res = await fetch(URL, {
         method: 'POST',
         body: datos
       })

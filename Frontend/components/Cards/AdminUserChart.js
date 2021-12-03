@@ -29,7 +29,8 @@ export default function AdminUserChart() {
   }
   React.useEffect(() => {
     //get users from database
-    fetch("http://localhost:8080/api/v1/users")
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/users' : 'http://localhost:8080/api/v1/users';
+    fetch(URL)
       .then((res) => res.json())
       .then((data) => getDates(data))
       .then(labels => {

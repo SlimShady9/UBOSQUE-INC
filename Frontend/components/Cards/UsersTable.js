@@ -29,8 +29,8 @@ export default function UsersTable({ color }) {
 
   const editUser = (i) => {
     i.rol = parseInt(i.rol);
-    console.log(i);
-    fetch("http://localhost:8080/api/v1/users/" + i.id, {
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/users/' : 'http://localhost:8080/api/v1/users/';
+    fetch(URL + i.id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -53,7 +53,8 @@ export default function UsersTable({ color }) {
   };
 
   const retireveUsers = () => {
-    fetch("http://localhost:8080/api/v1/users")
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/users' : 'http://localhost:8080/api/v1/users';
+    fetch(URL)
       .then((res) => res.json())
       .then((data) => {
         const data2 = data.filter((user) => user.id !== JSON.parse(localStorage.getItem("User")).id);

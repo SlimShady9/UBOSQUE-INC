@@ -24,7 +24,8 @@ export default function UserDocsChart() {
 
   React.useEffect(() => {
     var month = new Date().getMonth();
-    fetch(`http://localhost:8080/api/v1/userdocuments/${JSON.parse(localStorage.getItem('User')).id}`)
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/' : 'http://localhost:8080/api/v1/';
+    fetch(`${URL}userdocuments/${JSON.parse(localStorage.getItem('User')).id}`)
       .then((res) => res.json())
       .then((data) => getDates(data))
       .then(labels => {

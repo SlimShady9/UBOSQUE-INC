@@ -27,7 +27,8 @@ export default function AdminDocumentsChart() {
     var month = new Date().getMonth();
 
     //get users from database
-    fetch("http://localhost:8080/api/v1/documents")
+    const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/documents' : 'http://localhost:8080/api/v1/documents';
+    fetch(URL)
       .then((res) => res.json())
       .then((data) => getDates(data))
       .then(labels => {
