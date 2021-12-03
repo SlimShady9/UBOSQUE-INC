@@ -6,6 +6,7 @@ export default function UserOrdersChart() {
   const getDates = (data) => {
     let dates = [0,0,0,0,0,0,0,0,0,0,0,0];
     let cont = [0,0,0,0,0,0,0,0,0,0,0,0];
+    if(data[0] != null){
     data.forEach((item) => {
       var date = new Date(item.date);
       var month = date.getMonth();
@@ -61,7 +62,7 @@ export default function UserOrdersChart() {
             break;
           default: break;
         }
-    });
+    });}
     return dates;
   }
 
