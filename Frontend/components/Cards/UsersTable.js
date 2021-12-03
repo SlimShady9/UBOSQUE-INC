@@ -40,12 +40,16 @@ export default function UsersTable({ color }) {
       .then((res) => res.json())
       .then((data) => {
         data.edit = false;
-        console.log(data);
-        setUsers(users.map(user => user.id === i.id ? {...data } : user));
+        setUsers([...users.map(us => {
+          if (us.id === data.id) {
+            return data;
+          } else {
+            return us;
+          }
+        })]);
         setSelectedUsers(users.slice(selectedUsers.length - pagination, selectedUsers.length));
       });
   }
-
 
 
   const cancelEdit = () => {
