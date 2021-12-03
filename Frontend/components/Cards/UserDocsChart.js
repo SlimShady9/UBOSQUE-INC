@@ -5,20 +5,24 @@ export default function UserDocsChart() {
 
   const getDates = (data) => {
     let dates = [0,0,0,0,0,0];
-    data.forEach((item) => {
-      var date = new Date(item.date);
-      var month = date.getMonth();
-      if (new Date().getFullYear() === date.getFullYear()) 
-        switch (month % 6 ) {
-          case 0: dates[0]++; break;
-          case 1: dates[1]++; break;
-          case 2: dates[2]++; break;
-          case 3: dates[3]++; break;
-          case 4: dates[4]++; break;
-          case 5: dates[5]++; break;
-          default: break;
-        }
-    });
+    if(data[0] != null){
+      data.forEach((item) => {
+        
+        var date = new Date(item.date);
+        var month = date.getMonth();
+        
+        if (new Date().getFullYear() === date.getFullYear()) 
+          switch (month % 6 ) {
+            case 0: dates[0]++; break;
+            case 1: dates[1]++; break;
+            case 2: dates[2]++; break;
+            case 3: dates[3]++; break;
+            case 4: dates[4]++; break;
+            case 5: dates[5]++; break;
+            default: break;
+          }
+      });
+    } 
     return dates;
   }
 
