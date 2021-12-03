@@ -1,63 +1,51 @@
 import React from "react";
 import Chart from "chart.js";
 
-export default function AdminUserChart() {
-  //get dates for last 6 months from data
+export default function UserDocsChart() {
+
   const getDates = (data) => {
-    let dates = [0,0,0,0,0,0,0,0,0,0,0,0];
+    let dates = [0,0,0,0,0,0];
     data.forEach((item) => {
-      var date = new Date(item.fechaCreacion);
+      var date = new Date(item.date);
       var month = date.getMonth();
       if (new Date().getFullYear() === date.getFullYear()) 
-        switch (month) {
+        switch (month % 6 ) {
           case 0: dates[0]++; break;
           case 1: dates[1]++; break;
           case 2: dates[2]++; break;
           case 3: dates[3]++; break;
           case 4: dates[4]++; break;
           case 5: dates[5]++; break;
-          case 6: dates[6]++; break;
-          case 7: dates[7]++; break;
-          case 8: dates[8]++; break;
-          case 9: dates[9]++; break;
-          case 10: dates[10]++; break;
-          case 11: dates[11]++; break;
           default: break;
         }
     });
     return dates;
   }
+
   React.useEffect(() => {
-    //get users from database
-    fetch("http://localhost:8080/api/v1/users")
+    var month = new Date().getMonth();
+    fetch(`http://localhost:8080/api/v1/userdocuments/${JSON.parse(localStorage.getItem('User')).id}`)
       .then((res) => res.json())
       .then((data) => getDates(data))
       .then(labels => {
-        let config = {
-          type: "bar",
+        var config = {
+          type: "line",
           data: {
             labels: [
-              "Enero",
-              "Febrero",
-              "Marzo",
-              "Abril",
-              "Mayo",
-              "Junio",
-              "Julio",
-              "Agosto",
-              "Septiembre",
-              "Octubre",
-              "Noviembre",
-              "Diciembre",
+              month<6? "Enero" : "Julio",
+              month<6? "Febrero": "Agosto",
+              month<6? "Marzo"  : "Septiembre",
+              month<6? "April": "Octubre",
+              month<6? "Mayo" : "Noviembre",
+              month<6? "Junio" : "Diciembre",
             ],
             datasets: [
               {
                 label: new Date().getFullYear(),
-                backgroundColor: "#ed64a6",
-                borderColor: "#ed64a6",
+                backgroundColor: "#4c51bf",
+                borderColor: "#4c51bf",
                 data: labels,
                 fill: false,
-                barThickness: 8,
               },
             ],
           },
@@ -66,7 +54,15 @@ export default function AdminUserChart() {
             responsive: true,
             title: {
               display: false,
-              text: "Orders Chart",
+              text: "Sales Charts",
+              fontColor: "white",
+            },
+            legend: {
+              labels: {
+                fontColor: "white",
+              },
+              align: "end",
+              position: "bottom",
             },
             tooltips: {
               mode: "index",
@@ -76,26 +72,24 @@ export default function AdminUserChart() {
               mode: "nearest",
               intersect: true,
             },
-            legend: {
-              labels: {
-                fontColor: "rgba(0,0,0,.4)",
-              },
-              align: "end",
-              position: "bottom",
-            },
             scales: {
               xAxes: [
                 {
-                  display: false,
+                  ticks: {
+                    fontColor: "rgba(255,255,255,.7)",
+                  },
+                  display: true,
                   scaleLabel: {
-                    display: true,
+                    display: false,
                     labelString: "Month",
+                    fontColor: "white",
                   },
                   gridLines: {
+                    display: false,
                     borderDash: [2],
                     borderDashOffset: [2],
                     color: "rgba(33, 37, 41, 0.3)",
-                    zeroLineColor: "rgba(33, 37, 41, 0.3)",
+                    zeroLineColor: "rgba(0, 0, 0, 0)",
                     zeroLineBorderDash: [2],
                     zeroLineBorderDashOffset: [2],
                   },
@@ -103,17 +97,21 @@ export default function AdminUserChart() {
               ],
               yAxes: [
                 {
+                  ticks: {
+                    fontColor: "rgba(255,255,255,.7)",
+                  },
                   display: true,
                   scaleLabel: {
                     display: false,
                     labelString: "Value",
+                    fontColor: "white",
                   },
                   gridLines: {
-                    borderDash: [2],
+                    borderDash: [3],
+                    borderDashOffset: [3],
                     drawBorder: false,
-                    borderDashOffset: [2],
-                    color: "rgba(33, 37, 41, 0.2)",
-                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
+                    color: "rgba(255, 255, 255, 0.15)",
+                    zeroLineColor: "rgba(33, 37, 41, 0)",
                     zeroLineBorderDash: [2],
                     zeroLineBorderDashOffset: [2],
                   },
@@ -122,26 +120,24 @@ export default function AdminUserChart() {
             },
           },
         };
-        let ctx = document.getElementById("bar-chart").getContext("2d");
-        window.myBar = new Chart(ctx, config);
+        var ctx = document.getElementById("line-chart2").getContext("2d");
+        window.myLine = new Chart(ctx, config);
       });
   }, []);
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700">
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
-              <h2 className="text-blueGray-700 text-xl font-semibold">
-                Documentos registrados por mes
-              </h2>
+              <h2 className="text-white text-xl font-semibold">Cantidad de documentos registrados por mes</h2>
             </div>
           </div>
         </div>
         <div className="p-4 flex-auto">
           {/* Chart */}
           <div className="relative h-350-px">
-            <canvas id="bar-chart"></canvas>
+            <canvas id="line-chart2"></canvas>
           </div>
         </div>
       </div>

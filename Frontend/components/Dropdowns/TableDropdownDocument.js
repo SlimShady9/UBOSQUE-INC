@@ -19,11 +19,11 @@ const TableDropdownDocument = ({id}) => {
   };
 
   const eliminar = async () => {
-    const res = await fetch("http://localhost:8080/api/v1/users/" + id, {
+    const res = await fetch("http://localhost:8080/api/v1/documents/" + id, {
       method: "DELETE"
-    })
+    });
     if (res.ok === true) {
-      Swal.fire("Exito", "usuario eliminado exitosamente", "success")
+      Swal.fire("Exito", "Documento eliminado exitosamente", "success")
       //setUsers(users.filter(user => user.id !== id))
     } else {
       Swal.fire("Error", "No se pudo eliminar, intentelo mas tarde", "error")
@@ -33,8 +33,8 @@ const TableDropdownDocument = ({id}) => {
 
   const eli = (id) => {
     Swal.fire({
-      title: 'Esta seguro?',
-      text: "¿Quiere eliminar este usuario?",
+      title: '¿Esta seguro?',
+      text: "¿Quiere eliminar este documento?",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -42,7 +42,7 @@ const TableDropdownDocument = ({id}) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        //eliminar(id)
+        eliminar(id)
       }
     })
   }
@@ -77,8 +77,7 @@ const TableDropdownDocument = ({id}) => {
             }
           > Ver más detalles</button>
         </Link>
-        <a
-          href="#pablo"
+        <button
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
@@ -86,7 +85,7 @@ const TableDropdownDocument = ({id}) => {
           onClick={() => eli()}
         >
           Eliminar
-        </a>
+        </button>
       </div>
     </>
   );

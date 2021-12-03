@@ -9,124 +9,123 @@ export default function AdminDocumentsChart() {
     data.forEach((item) => {
       var date = new Date(item.date);
       var month = date.getMonth();
-      switch (month % 6 ) {
-        case 0: dates[0]++; break;
-        case 1: dates[1]++; break;
-        case 2: dates[2]++; break;
-        case 3: dates[3]++; break;
-        case 4: dates[4]++; break;
-        case 5: dates[5]++; break;
-        default: break;
-      }
+      if (new Date().getFullYear() === date.getFullYear()) 
+        switch (month % 6 ) {
+          case 0: dates[0]++; break;
+          case 1: dates[1]++; break;
+          case 2: dates[2]++; break;
+          case 3: dates[3]++; break;
+          case 4: dates[4]++; break;
+          case 5: dates[5]++; break;
+          default: break;
+        }
     });
     return dates;
   }
 
   React.useEffect(() => {
     var month = new Date().getMonth();
-    var datos = [0,0,0,0,0,0];
 
     //get users from database
-    fetch("/api/admin/documents/monthly")
+    fetch("http://localhost:8080/api/v1/documents")
       .then((res) => res.json())
-      .then((data) => {
-        datos = getDates(data);
+      .then((data) => getDates(data))
+      .then(labels => {
+        var config = {
+          type: "line",
+          data: {
+            labels: [
+              month<6? "Enero" : "Julio",
+              month<6? "Febrero": "Agosto",
+              month<6? "Marzo"  : "Septiembre",
+              month<6? "April": "Octubre",
+              month<6? "Mayo" : "Noviembre",
+              month<6? "Junio" : "Diciembre",
+            ],
+            datasets: [
+              {
+                label: new Date().getFullYear(),
+                backgroundColor: "#4c51bf",
+                borderColor: "#4c51bf",
+                data: labels,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            title: {
+              display: false,
+              text: "Sales Charts",
+              fontColor: "white",
+            },
+            legend: {
+              labels: {
+                fontColor: "white",
+              },
+              align: "end",
+              position: "bottom",
+            },
+            tooltips: {
+              mode: "index",
+              intersect: false,
+            },
+            hover: {
+              mode: "nearest",
+              intersect: true,
+            },
+            scales: {
+              xAxes: [
+                {
+                  ticks: {
+                    fontColor: "rgba(255,255,255,.7)",
+                  },
+                  display: true,
+                  scaleLabel: {
+                    display: false,
+                    labelString: "Month",
+                    fontColor: "white",
+                  },
+                  gridLines: {
+                    display: false,
+                    borderDash: [2],
+                    borderDashOffset: [2],
+                    color: "rgba(33, 37, 41, 0.3)",
+                    zeroLineColor: "rgba(0, 0, 0, 0)",
+                    zeroLineBorderDash: [2],
+                    zeroLineBorderDashOffset: [2],
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  ticks: {
+                    fontColor: "rgba(255,255,255,.7)",
+                  },
+                  display: true,
+                  scaleLabel: {
+                    display: false,
+                    labelString: "Value",
+                    fontColor: "white",
+                  },
+                  gridLines: {
+                    borderDash: [3],
+                    borderDashOffset: [3],
+                    drawBorder: false,
+                    color: "rgba(255, 255, 255, 0.15)",
+                    zeroLineColor: "rgba(33, 37, 41, 0)",
+                    zeroLineBorderDash: [2],
+                    zeroLineBorderDashOffset: [2],
+                  },
+                },
+              ],
+            },
+          },
+        };
+        var ctx = document.getElementById("line-chart").getContext("2d");
+        window.myLine = new Chart(ctx, config);
       })
-
-    var config = {
-      type: "line",
-      data: {
-        labels: [
-          month<6? "Enero" : "Julio",
-          month<6? "Febrero": "Agosto",
-          month<6? "Marzo"  : "Septiembre",
-          month<6? "April": "Octubre",
-          month<6? "Mayo" : "Noviembre",
-          month<6? "Junio" : "Diciembre",
-        ],
-        datasets: [
-          {
-            label: new Date().getFullYear(),
-            backgroundColor: "#4c51bf",
-            borderColor: "#4c51bf",
-            data: datos,
-            fill: false,
-          },
-        ],
-      },
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        title: {
-          display: false,
-          text: "Sales Charts",
-          fontColor: "white",
-        },
-        legend: {
-          labels: {
-            fontColor: "white",
-          },
-          align: "end",
-          position: "bottom",
-        },
-        tooltips: {
-          mode: "index",
-          intersect: false,
-        },
-        hover: {
-          mode: "nearest",
-          intersect: true,
-        },
-        scales: {
-          xAxes: [
-            {
-              ticks: {
-                fontColor: "rgba(255,255,255,.7)",
-              },
-              display: true,
-              scaleLabel: {
-                display: false,
-                labelString: "Month",
-                fontColor: "white",
-              },
-              gridLines: {
-                display: false,
-                borderDash: [2],
-                borderDashOffset: [2],
-                color: "rgba(33, 37, 41, 0.3)",
-                zeroLineColor: "rgba(0, 0, 0, 0)",
-                zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
-              },
-            },
-          ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: "rgba(255,255,255,.7)",
-              },
-              display: true,
-              scaleLabel: {
-                display: false,
-                labelString: "Value",
-                fontColor: "white",
-              },
-              gridLines: {
-                borderDash: [3],
-                borderDashOffset: [3],
-                drawBorder: false,
-                color: "rgba(255, 255, 255, 0.15)",
-                zeroLineColor: "rgba(33, 37, 41, 0)",
-                zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
-              },
-            },
-          ],
-        },
-      },
-    };
-    var ctx = document.getElementById("line-chart").getContext("2d");
-    window.myLine = new Chart(ctx, config);
   }, []);
   return (
     <>

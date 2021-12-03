@@ -1,9 +1,8 @@
 import React from "react";
-
 // components
 
-import CardLineChart from "components/Cards/CardLineChart.js";
-import CardBarChart from "components/Cards/CardBarChart.js";
+import UserDocsChart from "components/Cards/UserDocsChart.js";
+import UserOrdersChart from "components/Cards/UserOrdersChart.js";
 
 // layout for page
 
@@ -14,10 +13,10 @@ export default function Dashboard() {
     <>
       <div className="flex flex-wrap md:items-center">
         <div className="w-full xl:w-8/12 mb-12 mx-auto xl:mb-0 px-4">
-          <CardLineChart />
+          <UserDocsChart/>
         </div>
         <div className="w-full xl:w-8/12 mx-auto px-4">
-          <CardBarChart />
+          <UserOrdersChart/>
         </div>
       </div>
     </>

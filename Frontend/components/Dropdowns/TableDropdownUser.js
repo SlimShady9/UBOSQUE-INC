@@ -46,9 +46,7 @@ const NotificationDropdown = ({id, users, setUsers}) => {
   }
 
   const modi = () => {
-    console.log(users);
     setUsers([...users.map(obj => obj.id === id ? {...obj, edit: true} : obj)])
-    console.log(users);
   }
 
 
