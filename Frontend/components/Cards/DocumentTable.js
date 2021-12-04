@@ -21,9 +21,9 @@ export default function DocumentTable({ color }) {
     })
     .then(data => {
       console.log(data)
-      if(data.reference == null){
+      if(data.reference != null){
         setdatos(data)
-      }
+      }else setdatos(data)
       }) 
     .catch(() => Swal.fire("Error","Error en el servidor, intentelo más tarde", "error"))
   }, [])
