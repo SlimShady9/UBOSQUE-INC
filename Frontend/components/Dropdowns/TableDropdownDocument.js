@@ -18,7 +18,7 @@ const TableDropdownDocument = ({id}) => {
     setDropdownPopoverShow(false);
   };
 
-  const eliminar = async (id) => {
+  const eliminar = async () => {
     const URL = process.env.NODE_ENV === 'production' ? 'https://mondsinc.herokuapp.com/api/v1/documents/' : 'http://localhost:8080/api/v1/documents/';
     const res = await fetch(URL + id, {
       method: "DELETE"
@@ -32,7 +32,7 @@ const TableDropdownDocument = ({id}) => {
   }
 
 
-  const eli = (id) => {
+  const eli = () => {
     Swal.fire({
       title: '¿Esta seguro?',
       text: "¿Quiere eliminar este documento?",
@@ -43,7 +43,7 @@ const TableDropdownDocument = ({id}) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        eliminar(id)
+        eliminar()
       }
     })
   }
