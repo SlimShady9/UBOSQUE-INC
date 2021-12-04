@@ -32,7 +32,7 @@ const TableDropdownDocument = ({id}) => {
   }
 
 
-  const eli = (id) => {
+  const eli = () => {
     Swal.fire({
       title: '¿Esta seguro?',
       text: "¿Quiere eliminar este documento?",
@@ -43,7 +43,7 @@ const TableDropdownDocument = ({id}) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        eliminar(id)
+        eliminar()
       }
     })
   }
