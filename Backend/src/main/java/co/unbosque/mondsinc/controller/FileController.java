@@ -1,5 +1,7 @@
 package co.unbosque.mondsinc.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -225,7 +227,7 @@ public class FileController {
 
 
     public void leerPila(XSSFWorkbook excel, List<Concept> concepts, String numOrder, String tpDocumment, int number, String nomContributor, String post,
-    int month, int year, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates, double IBC, double salud, double pension, double arl) {
+    int month, int year, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates, double IBC, double salud, double pension, double arl) throws FileNotFoundException, IOException {
     XSSFSheet pila = excel.getSheetAt(1);
 
     int prows=pila.getLastRowNum();
@@ -300,6 +302,20 @@ public class FileController {
                 }
             }
 
+            if (nrow > 5) {
+                switch(column) {
+                    case 8: cell.setCellValue(salud);
+                    case 11: cell.setCellValue(difSalud);
+                    case 12: cell.setCellValue(estadoSalud);
+                    case 13: cell.setCellValue(pension);
+                    case 16: cell.setCellValue(difPension);
+                    case 17: cell.setCellValue(estadoPension);
+                    case 18: cell.setCellValue(arl);
+                    case 21: cell.setCellValue(difArl);
+                    case 22: cell.setCellValue(estadoArl);
+                }
+            }
+
         }
     }
     if (numOrder != "" && number != 0) {
@@ -308,6 +324,9 @@ public class FileController {
         admissionDates, IBC, pagoSalud, difSalud, estadoSalud, pagoPension, difPension, estadoPension, pagoArl, difArl, estadoArl);
         orders.add(order);
         orderRepository.save(order);
+    }
+    try (FileOutputStream outputStream = new FileOutputStream("JavaBooks.xlsx")) {
+        excel.write(outputStream);
     }
     }
 }
