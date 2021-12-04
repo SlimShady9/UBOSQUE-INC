@@ -21,7 +21,7 @@ export default function DocumentTable({ color }) {
     })
     .then(data => {
       console.log(data)
-      if(data.reference == null){
+      if(data[0] != null){
         setdatos(data)
       }
       }) 
