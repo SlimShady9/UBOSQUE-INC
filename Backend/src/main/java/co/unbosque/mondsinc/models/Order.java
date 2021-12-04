@@ -39,7 +39,8 @@ public class Order {
     private double difArl;
     private String estadoArl;
     public Order(List<Concept> concepts, String numOrder, String tpDocumment, int number, String nomContributor, String post,
-    int month, int year, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates, double IBC, double salud, double difSalud, String estadoSalud, double pension, double difPension, String estadoPension, double arl, double difArl, String estadoArl) {
+    int month, int year, double salary, int workedDays, int daysDisabled, int daysLicensed, int totalDays, Date admissionDates, double IBC, 
+    double salud, double difSalud, String estadoSalud, double pension, double difPension, String estadoPension, double arl, double difArl, String estadoArl) {
 
         this.concepts = concepts;
         this.numOrder = numOrder;
@@ -232,6 +233,30 @@ public class Order {
     public void setEstadoPension(String estadoPension) {
         this.estadoPension = estadoPension;
     }
+        
+    public double getArl() {
+        return this.arl;
+    }
+
+    public void setArl(double arl) {
+        this.arl = arl;
+    }
+    
+    public double getDifArl() {
+        return this.difArl;
+    }
+
+    public void setDifArl(double difArl) {
+        this.difArl = difArl;
+    }
+    
+    public String getEstadoArl() {
+        return this.estadoArl;
+    }
+
+    public void setEstadoArl(String estadoArl) {
+        this.estadoArl = estadoArl;
+    }
     @Override
     public String toString() {
         return "{" +
@@ -250,6 +275,16 @@ public class Order {
             ", daysLicensed='" + getDaysLicensed() + "'" +
             ", totalDays='" + getTotalDays() + "'" +
             ", admissionDates='" + getAdmissionDates() + "'" +
+            ", IBC='" + getIBC() + "'" +
+            ", salud='" + getSalud() + "'" +
+            ", difSalud='" + getDifSalud() + "'" +
+            ", estadoSalud='" + getEstadoSalud() + "'" +
+            ", pension='" + getPension() + "'" +
+            ", difPension='" + getDifPension() + "'" +
+            ", estadoPension='" + getEstadoPension() + "'" +
+            ", arl='" + getArl() + "'" +
+            ", difArl='" + getArl() + "'" +
+            ", estadoArl='" + getEstadoArl() + "'" +
             "}";
     }
 }
